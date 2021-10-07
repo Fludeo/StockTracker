@@ -5,8 +5,10 @@
   "main": "app.js",
   "dependencies": {
     "better-sqlite3": "^7.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "jsdoc": "^3.6.7",
     "nodemon": "^2.0.13",
     "rsdi": "^1.0.12"
@@ -17,7 +19,8 @@
     "eslint-plugin-import": "^2.24.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nodemon": "nodemon server/src/app.js"
   },
   "author": "",
   "license": "ISC"
