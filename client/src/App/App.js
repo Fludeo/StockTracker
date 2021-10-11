@@ -9,7 +9,10 @@ import { HomePage } from "../components/home-page/home-page";
 import { LoginPage } from "../components/login-page/loginPage";
 
 
-function App() {
+
+
+
+function App(props) {
   return (
   <>
   <Router>

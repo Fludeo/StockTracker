@@ -1,19 +1,29 @@
 const {
   default: DIContainer, object, get, factory,
 } = require('rsdi');
-const Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const session = require('express-session');
-const { ProductController, ProductService, ProductRepository } = require('../module/product/module');
+const {
+  ProductController, ProductService, ProductModel, ProductRepository,
+} = require('../module/product/module');
 const { DefaultController } = require('../module/default/module');
 
-function databaseSetUp() {
-  const databaseConection = new Database(process.env.DATABASE_PATH);
-  return databaseConection;
+function databaseSetup() {
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    dialectOptions: { decimalNumbers: true },
+    storage: process.env.DATABASE_PATH,
+  });
+  return sequelize;
+}
+
+function configureProductModel(container) {
+  return ProductModel.setup(container.get('sequelize'));
 }
 
 function addCommonDefinitions(container) {
   container.addDefinitions({
-    sqliteDatabase: factory(databaseSetUp),
+    sequelize: factory(databaseSetup),
     DefaultController: object(DefaultController).construct(get('ProductService')),
     Session: session,
   });
@@ -23,7 +33,8 @@ function addProductDefinitions(container) {
   container.addDefinitions({
     ProductController: object(ProductController).construct(get('ProductService')),
     ProductService: object(ProductService).construct(get('ProductRepository')),
-    ProductRepository: object(ProductRepository).construct(get('sqliteDatabase')),
+    ProductModel: factory(configureProductModel),
+    ProductRepository: object(ProductRepository).construct(get('ProductModel')),
   });
 }
 /**

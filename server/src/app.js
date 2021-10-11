@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+
+// const { dataLoad } = require('./config/dataload/dataload');
 const ConfigDIC = require('./config/di');
 const { initDefaultModule } = require('./module/default/module');
 const { initProductModule } = require('./module/product/module');
@@ -22,6 +24,9 @@ app.use(container.get('Session')(sessionOptions));
 const port = process.env.PORT || 3000;
 initDefaultModule(container, app);
 initProductModule(container, app);
+container.get('sequelize').sync();
+
+// dataLoad(container);
 
 app.use((req) => { console.log(`llamada con verbo ${req.method} a ${req.path}`); });
 

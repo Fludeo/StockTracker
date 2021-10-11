@@ -9,7 +9,7 @@ export const HomePage = (props)=>{
 
 
     const links=[
-        {link:'home',url: '/home'},
+        {link:'Home',url: '/home'},
         {link:'Clientes',url: '/clients'},
         {link:'Stock',url: '/stock'},
         {link:'Salir',url: '/login'},

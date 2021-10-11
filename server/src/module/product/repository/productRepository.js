@@ -1,11 +1,29 @@
+const { fromProductModelToEntity } = require('../mapper/productMapper');
+
 module.exports = class ProductRepository {
-  constructor(DataBase) {
-    this.DataBase = DataBase;
+  /**
+   *
+   * @param {typeof import('../model/productModel')} productModel
+   */
+  constructor(productModel) {
+    this.productModel = productModel;
   }
 
-  async getById(id) {
-    const stmt = this.DataBase.prepare('SELECT * FROM products WHERE id = ? ');
-    const product = stmt.get(id);
-    return product;
+  async loadStock(product) {
+    const productInstance = await this.productModel.findByPk(product.id);
+    productInstance.stock = product.stock;
+    await productInstance.save();
+  }
+
+  async getById(productId) {
+    const productInstance = await this.productModel.findByPk(productId);
+
+    return fromProductModelToEntity(productInstance);
+  }
+
+  async getAllProducts() {
+    const allProducts = await this.productModel.findAll();
+
+    return allProducts.map((product) => fromProductModelToEntity(product));
   }
 };
