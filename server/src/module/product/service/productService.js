@@ -7,8 +7,8 @@ module.exports = class ProductService {
     return this.productRepository.getById(id);
   }
 
-  async loadStock(stockLoad) {
-    stockLoad.map((product) => this.productRepository.loadStock(product));
+  async addStock(stockLoad) {
+    await this.productRepository.addStock(stockLoad);
   }
 
   async getAllProducts() {

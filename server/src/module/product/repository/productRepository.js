@@ -9,9 +9,9 @@ module.exports = class ProductRepository {
     this.productModel = productModel;
   }
 
-  async loadStock(product) {
+  async addStock(product) {
     const productInstance = await this.productModel.findByPk(product.id);
-    productInstance.stock = product.stock;
+    productInstance.stock = Number(productInstance.stock) + Number(product.nuevoStock);
     await productInstance.save();
   }
 
