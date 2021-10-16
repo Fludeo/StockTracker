@@ -7,13 +7,25 @@ module.exports = class ProductService {
     return this.productRepository.getById(id);
   }
 
-  async addStock(stockLoad) {
-    await this.productRepository.addStock(stockLoad);
-  }
+  // async addStock(stockLoad) {
+  //   await this.productRepository.addStock(stockLoad);
+  // }
 
   async getAllProducts() {
     const data = await this.productRepository.getAllProducts();
 
     return data;
+  }
+
+  async updateProduct(product) {
+    await this.productRepository.updateProduct(product);
+  }
+
+  async deleteProduct(product) {
+    await this.productRepository.deleteProduct(product);
+  }
+
+  async addProduct(product) {
+    await this.productRepository.addProduct(product);
   }
 };

@@ -8,7 +8,9 @@ module.exports = class ProductController {
     const BASEROUTE = this.BASE_ROUTE;
     app.get(`${BASEROUTE}/get/all`, this.getAllProducts.bind(this));
     app.get(`${BASEROUTE}/get/:id`, this.getProductById.bind(this));
-    app.post(`${BASEROUTE}/addstock`, this.addStock.bind(this));
+    app.post(`${BASEROUTE}/addproduct`, this.addProduct.bind(this));
+    app.post(`${BASEROUTE}/deleteproduct`, this.deleteProduct.bind(this));
+    app.post(`${BASEROUTE}/updateproduct`, this.updateProduct.bind(this));
   }
 
   /**
@@ -39,9 +41,27 @@ module.exports = class ProductController {
  * @param {import('express').Response} res
  */
 
-  async addStock(req, res) {
-    const stockLoad = req.body;
-    await this.productService.addStock(stockLoad);
+  async addProduct(req, res) {
+    const newProduct = req.body;
+
+    await this.productService.addProduct(newProduct);
+
+    res.sendStatus(200);
+  }
+
+  async deleteProduct(req, res) {
+    const product = req.body;
+
+    await this.productService.deleteProduct(product);
+
+    res.sendStatus(200);
+  }
+
+  async updateProduct(req, res) {
+    const product = req.body;
+    console.log(product);
+    await this.productService.updateProduct(product);
+
     res.sendStatus(200);
   }
 };

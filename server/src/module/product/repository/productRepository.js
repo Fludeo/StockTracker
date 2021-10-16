@@ -9,10 +9,28 @@ module.exports = class ProductRepository {
     this.productModel = productModel;
   }
 
-  async addStock(product) {
+  async updateProduct(product) {
     const productInstance = await this.productModel.findByPk(product.id);
-    productInstance.stock = Number(productInstance.stock) + Number(product.nuevoStock);
+    if (product.stock !== '') { productInstance.stock = Number(productInstance.stock) + Number(product.stock); }
+    if (product.descripcion !== '') { productInstance.descripcion = product.descripcion; }
+    if (product.precio !== '') { productInstance.precioCosto = Number(product.precio); }
+    if (product.modificador !== '') { productInstance.precioModificador = Number(product.modificador); }
+
     await productInstance.save();
+  }
+
+  async addProduct(product) {
+    const newProduct = await this.productModel.build({
+      id: Number(product.id),
+      descripcion: product.descripcion,
+      precioCosto: Number(product.precio),
+    });
+
+    await newProduct.save();
+  }
+
+  async deleteProduct(product) {
+    await this.productModel.destroy({ where: { id: Number(product.deleteId) } });
   }
 
   async getById(productId) {
