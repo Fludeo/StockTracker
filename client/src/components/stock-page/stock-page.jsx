@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import fetchData from "../../customhooks/fetchData"
-import { AddProductForm, AddStockForm, DeleteProductForm, UpdateModifierForm, UpdatePriceForm } from "../common/form"
+import { AddProductForm, SimpleForm } from "../common/form"
 import { PopUp } from "../common/popup"
 import { Table } from "../common/table"
 
@@ -58,7 +58,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: '', stock: formContent.stock, descripcion: '', modificador: '' }),
+        body: JSON.stringify({ id: popupContent.id, precio: '', stock: formContent.updatedValue, descripcion: '', modificador: '' }),
       })
       props.history.go(0)
     }
@@ -96,7 +96,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formContent),
+        body: JSON.stringify({ ...formContent, id: formContent.updatedValue }),
       })
       props.history.go(0)
     }
@@ -115,7 +115,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: formContent.precio, stock: '', descripcion: '', modificador: '' }),
+        body: JSON.stringify({ id: popupContent.id, precio: formContent.updatedValue, stock: '', descripcion: '', modificador: '' }),
       })
       props.history.go(0)
     }
@@ -134,7 +134,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: '', stock: '', descripcion: '', modificador: formContent.modificador }),
+        body: JSON.stringify({ id: popupContent.id, precio: '', stock: '', descripcion: '', modificador: formContent.updatedValue }),
       })
       props.history.go(0)
     }
@@ -171,19 +171,19 @@ export const StockPage = (props) => {
         <Table addStock={addStock} addProduct={addProduct} deleteProduct={deleteProduct} updatePrice={updatePriceProduct} updateModifier={updateModifierProduct} tableContent={data} ></Table>
       </section>
       <PopUp trigger={stockPopup}>
-        <AddStockForm setStockPopup={setStockPopup} setFormContent={setFormContent} handleStockSubmit={handleStockSubmit} formContent={formContent} popupContent={popupContent} ></AddStockForm>
+        <SimpleForm inputType="number" formTitle="Agregar Stock del producto:" setPopup={setStockPopup} setFormContent={setFormContent} handleSubmit={handleStockSubmit} formContent={formContent} popupContent={popupContent} ></SimpleForm>
       </PopUp>
       <PopUp trigger={productPopup}>
         <AddProductForm setProductPopup={setProductPopup} setFormContent={setFormContent} handleProductSubmit={handleProductSubmit} formContent={formContent} ></AddProductForm>
       </PopUp>
       <PopUp trigger={deleteProductPopup}>
-        <DeleteProductForm products={data} setDeleteProductPopup={setDeleteProductPopup} setFormContent={setFormContent} handleDeleteProductSubmit={handleDeleteProductSubmit} formContent={formContent} ></DeleteProductForm>
+        <SimpleForm inputType="number" formTitle="Ingrese Id del producto a eliminar:" setPopup={setDeleteProductPopup} setFormContent={setFormContent} handleSubmit={handleDeleteProductSubmit} formContent={formContent} popupContent={popupContent} ></SimpleForm>
       </PopUp>
       <PopUp trigger={updatePricePopup}>
-        <UpdatePriceForm setUpdatePricePopup={setUpdatePricePopup} setFormContent={setFormContent} handleUpdatePriceSubmit={handleUpdatePriceSubmit} popupContent={popupContent} ></UpdatePriceForm>
+        <SimpleForm inputType="number" formTitle="Cambiar precio del producto:" setPopup={setUpdatePricePopup} setFormContent={setFormContent} handleSubmit={handleUpdatePriceSubmit} popupContent={popupContent} ></SimpleForm>
       </PopUp>
       <PopUp trigger={updateModifierPopup}>
-        <UpdateModifierForm setUpdateModifierPopup={setUpdateModifierPopup} setFormContent={setFormContent} handleUpdateModifierSubmit={handleUpdateModifierSubmit} popupContent={popupContent} ></UpdateModifierForm>
+        <SimpleForm inputType="number" formTitle="Cambiar modificador del producto:" setPopup={setUpdateModifierPopup} setFormContent={setFormContent} handleSubmit={handleUpdateModifierSubmit} popupContent={popupContent} ></SimpleForm>
       </PopUp>
     </main>
   )

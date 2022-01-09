@@ -30,7 +30,7 @@ module.exports = class ProductRepository {
   }
 
   async deleteProduct(product) {
-    await this.productModel.destroy({ where: { id: Number(product.deleteId) } });
+    await this.productModel.destroy({ where: { id: Number(product.id) } });
   }
 
   async getById(productId) {

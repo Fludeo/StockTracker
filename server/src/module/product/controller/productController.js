@@ -59,7 +59,6 @@ module.exports = class ProductController {
 
   async updateProduct(req, res) {
     const product = req.body;
-    console.log(product);
     await this.productService.updateProduct(product);
 
     res.sendStatus(200);
