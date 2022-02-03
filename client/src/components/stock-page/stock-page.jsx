@@ -162,10 +162,10 @@ export const StockPage = (props) => {
 
 
   return (loading ? 'Cargando' : error ? 'Error' :
-    <main className='container w-5/6 h-screen flex flex-col md:flex-row overflow-auto'>
+    <main className='md:w-5/6 w-full h-screen flex md:flex-col flex-row '>
 
 
-      <section className='container m-0 w-full flex flex-col overflow-auto'>
+      <section className=' m-0 w-full flex flex-col overflow-auto'>
 
 
         <Table addStock={addStock} addProduct={addProduct} deleteProduct={deleteProduct} updatePrice={updatePriceProduct} updateModifier={updateModifierProduct} tableContent={data} ></Table>
@@ -177,7 +177,7 @@ export const StockPage = (props) => {
         <AddProductForm setProductPopup={setProductPopup} setFormContent={setFormContent} handleProductSubmit={handleProductSubmit} formContent={formContent} ></AddProductForm>
       </PopUp>
       <PopUp trigger={deleteProductPopup}>
-        <SimpleForm inputType="number" formTitle="Ingrese Id del producto a eliminar:" setPopup={setDeleteProductPopup} setFormContent={setFormContent} handleSubmit={handleDeleteProductSubmit} formContent={formContent} popupContent={popupContent} ></SimpleForm>
+        <SimpleForm inputType="number" formTitle="Ingrese Id del producto a eliminar:" setPopup={setDeleteProductPopup} setFormContent={setFormContent} handleSubmit={handleDeleteProductSubmit} formContent={formContent} popupContent={""} ></SimpleForm>
       </PopUp>
       <PopUp trigger={updatePricePopup}>
         <SimpleForm inputType="number" formTitle="Cambiar precio del producto:" setPopup={setUpdatePricePopup} setFormContent={setFormContent} handleSubmit={handleUpdatePriceSubmit} popupContent={popupContent} ></SimpleForm>

@@ -11,3 +11,4 @@ export default async function fetchData(url,setData,setLoading,setError){
         setLoading(false)
     }
 }
+

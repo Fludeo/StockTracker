@@ -9,6 +9,7 @@ module.exports = class ProductModel extends Model {
         allowNull: false,
         primaryKey: true,
         unique: true,
+        autoIncrement: true,
       },
       descripcion: {
         type: DataTypes.STRING,

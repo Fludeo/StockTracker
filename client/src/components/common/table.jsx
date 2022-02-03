@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useHistory } from "react-router";
 import { Icon } from "./Icon";
 import { PopUp } from "./popup";
-
+import ARSConverter from "../../customhooks/helperFunctions"
 
 
 
@@ -45,29 +45,22 @@ export const Table = (props) => {
 
 
 
-
-
-
-
-
-
   return (
-    <div className='container w-full flex flex-col'>
+    <div className=' w-full flex flex-col'>
 
-      <div className="container bg-gray-50 justify-around flex flex-row sticky top-0">
+      <div className=" bg-gray-50 justify-around flex flex-row sticky top-0">
         <div className='flex flex-row' >
-          <input className='rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' onChange={(e) => filterContent(e.currentTarget.value)} type="text" placeholder='Buscar...' />
+          <input className=' md:w-52 w-32 rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' onChange={(e) => filterContent(e.currentTarget.value)} type="text" placeholder='Buscar...' />
           <Icon type={searchIcon.type} color={searchIcon.color} className="h-6 w-6 relative mt-2 top-1 "></Icon>
         </div>
         <div className='flex flex-row gap-2' >
-          <button className=" px-2 font-semibold text-green-100 rounded-md bg-green-500  hover:bg-blue-500" onClick={props.addProduct}>Nuevo producto</button>
-          <button className=" px-2 font-semibold text-red-100 rounded-md bg-red-500  hover:bg-blue-500" onClick={props.deleteProduct}>Quitar producto</button>
+          <button className=" md:text-base text-xs px-2 font-semibold text-green-100 rounded-md bg-green-500  hover:bg-blue-500" onClick={props.addProduct}>Nuevo producto</button>
+          <button className="md:text-base text-xs px-2 font-semibold text-red-100 rounded-md bg-red-500  hover:bg-blue-500" onClick={props.deleteProduct}>Quitar producto</button>
         </div>
       </div>
-      <table className=" auto divide-y divide-gray-200 ">
+      <table className=" overflow-auto divide-y divide-gray-200  table-auto">
         <thead className="bg-gray-50 sticky top-9">
-
-          <tr className='text-gray-500'>
+          <tr >
             <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>Id</th>
             <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>descripción</th>
             <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>stock</th>
@@ -84,16 +77,8 @@ export const Table = (props) => {
               <td className=' px-6 py-2 text-xs ' >{content.id}</td>
               <td className=' px-6 py-2 text-xs md:text-sm' >{content.descripcion}</td>
               <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2 '><p>{content.stock}</p><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon></div></td>
-              <td className='  px-6 py-2 text-xs ' >{Intl.NumberFormat('es-AR', {
-                currencyDisplay: 'symbol',
-                style: 'currency',
-                currency: 'ARS'
-              }).format(content.precioCosto * (1.25 + (content.precioModificador / 100)))}</td>
-              <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2'><p>{Intl.NumberFormat('es-AR', {
-                currencyDisplay: 'symbol',
-                style: 'currency',
-                currency: 'ARS'
-              }).format(content.precioCosto)}</p><Icon onclick={() => props.updatePrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
+              <td className='  px-6 py-2 text-xs ' >{ARSConverter(content.precioCosto * (1.25 + (content.precioModificador / 100)))}</td>
+              <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2'><p>{ARSConverter(content.precioCosto)}</p><Icon onclick={() => props.updatePrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
               <td className='  px-6 py-2 text-xs '><div className='flex flex-row gap-2'><p>{content.precioModificador}</p><Icon onclick={() => props.updateModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
             </tr>)}
         </tbody>

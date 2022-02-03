@@ -21,7 +21,6 @@ module.exports = class ProductRepository {
 
   async addProduct(product) {
     const newProduct = await this.productModel.build({
-      id: Number(product.id),
       descripcion: product.descripcion,
       precioCosto: Number(product.precio),
     });

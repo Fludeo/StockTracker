@@ -26,7 +26,7 @@ export const HomePage = (props) => {
 
 
     return (
-        <div className='container w-full  flex md:flex-row flex-col '>
+        <div className=' w-full  flex md:flex-row flex-col '>
             <Router history={history}>
                 <Navbar></Navbar>
                 <Switch>
@@ -40,9 +40,9 @@ export const HomePage = (props) => {
                 </Switch>
             </Router>
             <PopUp trigger={salePopupTrigger}>
-                <SaleForm></SaleForm>
+                <SaleForm history={history} setSalePopup ={setSalePopupTrigger}></SaleForm>
             </PopUp>
-            <Icon onclick={() => setSalePopupTrigger(true)} type={saleIcon.type} color={saleIcon.color} className=' absolute bottom-20 right-32 h-20 w-20  rounded-full hover:bg-blue-600 ' ></Icon>
+            <Icon onclick={() => setSalePopupTrigger(true)} type={saleIcon.type} color={saleIcon.color} className=' absolute md:bottom-20 md:right-32 md:h-20 md:w-20 bottom-10 right-5 h-16 w-16  rounded-full hover:bg-blue-600 ' ></Icon>
         </div>
     )
 }
