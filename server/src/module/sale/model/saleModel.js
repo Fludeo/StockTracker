@@ -15,6 +15,10 @@ module.exports = class SaleModel extends Model {
         type: DataTypes.FLOAT,
         allowNull: false,
       },
+      ganancia: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
 
     }, {
       tableName: 'sales',

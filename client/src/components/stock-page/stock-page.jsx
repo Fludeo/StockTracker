@@ -52,7 +52,7 @@ export const StockPage = (props) => {
   async function handleStockSubmit(e) {
     e.preventDefault()
     try {
-      const response = await fetch('/product/updateproduct', {
+      const response = await fetch('/product/addstockproduct', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -115,7 +115,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: formContent.updatedValue, stock: '', descripcion: '', modificador: '' }),
+        body: JSON.stringify({ id: popupContent.id, precioCosto: formContent.updatedValue, stock: '', descripcion: '', precioModificador: 0 }),
       })
       props.history.go(0)
     }
@@ -134,7 +134,7 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: '', stock: '', descripcion: '', modificador: formContent.updatedValue }),
+        body: JSON.stringify({ id: popupContent.id, precioCosto: 0, stock: 0, descripcion: '', precioModificador: formContent.updatedValue }),
       })
       props.history.go(0)
     }

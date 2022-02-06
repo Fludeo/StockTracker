@@ -23,4 +23,13 @@ module.exports = class Product {
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
   }
+
+  getFinalPrice() {
+    const finalPrice = (this.precioCosto * ((this.precioModificador / 100) + 1.25));
+    return finalPrice;
+  }
+
+  getCostPrice() {
+    return this.precioCosto;
+  }
 };

@@ -22,7 +22,7 @@ export const AddProductForm = (props) => {
             }}></input>
             <label className='text-yellow-500'>Precio de costo</label>
             <input step="any" type='number' min="1" className=' w-28 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' onChange={(e) => {
-                props.setFormContent({ ...props.formContent, precio: e.currentTarget.value })
+                props.setFormContent({ ...props.formContent, precioCosto: e.currentTarget.value })
             }}></input>
             <div className='container  justify-around flex  flex-row'>
                 <button className='h-9 my-4 px-2 font-bold text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' type='submit'>Aceptar</button>
@@ -43,12 +43,23 @@ export const SaleForm = (props) => {
     const [sortedData,setSortedData]= useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const [itemList, setCurrentItemList] = useState([{itemId:"",quantity:0, subTotal:0}])
+    const [itemList, setCurrentItemList] = useState([{itemId:"",quantity:0, subTotal:0 }])
+    const[totalVenta,setTotalVenta] = useState(0)
     
+    console.log(itemList)
+    function calcTotal(list){
+        if(list!=null){setTotalVenta(list.reduce(reducer,{subTotal:0}).subTotal)}
+    }
+    function reducer(previousItem,currentItem){
+      
+        let result = {subTotal :previousItem.subTotal + currentItem.subTotal}
+        
+         return result;
+    }
    async function  SalePost(e)
     {
         e.preventDefault();
-        const finalList ={list:itemList}
+        const finalList ={listaProductos:itemList}
         try {
             const response = await fetch('/sale/new', {
               method: 'POST',
@@ -66,18 +77,22 @@ export const SaleForm = (props) => {
       
           }
     }
-    function DeleteItem(e,item){
+    function DeleteItem(e,index){
         e.preventDefault();
-        let itemKey = itemList.indexOf(item)
-        let newSaleItems = [...itemList]
-        newSaleItems.splice(itemKey,1)
+        console.log(index)
+        const newSaleItems = [...itemList]
+        console.log([...itemList])
+        newSaleItems.splice(index,1)
+        console.log(newSaleItems)
         setCurrentItemList(newSaleItems)
+        calcTotal(newSaleItems)
     }
     function AddItem(e){
         e.preventDefault();
        let newSaleItems = [...itemList]
         newSaleItems.push({itemId:"",quantity:0, subTotal:0})
         setCurrentItemList(newSaleItems)
+        calcTotal(newSaleItems)
     }
     function UpdateItem(item,updatedItem){
         let itemKey = itemList.indexOf(item)
@@ -85,14 +100,10 @@ export const SaleForm = (props) => {
         let newSaleItems = [...itemList]
         newSaleItems[itemKey]= updatedItem;
         setCurrentItemList(newSaleItems);
+        calcTotal(newSaleItems)
     }
 
-    function reducer(previousItem,currentItem){
-      
-        let result = {subTotal :previousItem.subTotal + currentItem.subTotal}
-        
-         return result;
-    }
+   
 
     function setDataAux(data){
        setData(data)
@@ -119,19 +130,19 @@ export const SaleForm = (props) => {
                     <tbody className="divide-y divide-gray-500">
                         {itemList.map(itemRow => <tr key={itemList.indexOf(itemRow)}>
                             <td className=" md:text-base text-sm  p-4 pl-0">
-                                <select  className=" overflow-ellipsis w-40  md:w-96 rounded-md md:p-1  focus:outline-none border-2  focus:border-blue-500" defaultValue={""} onChange={(e)=>UpdateItem(itemRow,{...itemRow, itemId: e.currentTarget.value})} >
+                                <select  value={String(itemRow.itemId)} className=" overflow-ellipsis w-40  md:w-96 rounded-md md:p-1  focus:outline-none border-2  focus:border-blue-500"  onChange={(e)=>UpdateItem(itemRow,{...itemRow, itemId: e.currentTarget.value})} >
                                     <option value=""  disabled hidden>Elegir producto</option>
                                     {sortedData.map((product) => (<option key={product.id} value={product.id}>{`${product.descripcion}    (${product.stock})`}</option>))}
                                 </select>
                             </td>
                             <td className=" md:text-base text-sm">
-                                <input onChange={(e)=>UpdateItem(itemRow,{...itemRow, quantity: e.currentTarget.value})} className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' type="number" defaultValue={0} min="1" />
+                                <input onChange={(e)=>UpdateItem(itemRow,{...itemRow, quantity: e.currentTarget.value})} className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' type="number" value={itemRow.quantity} min="1" />
                             </td>
                             <td className="text-gray-200">
                                 {ARSConverter(itemRow.subTotal)}
                             </td>
                             <td>
-                            <Icon onclick={(e) => DeleteItem(e)} type={minusIcon.type} color={minusIcon.color} className=' m-0 h-6 w-6 hover:bg-gray-500'></Icon>
+                            <Icon onclick={(e) => DeleteItem(e,itemList.indexOf(itemRow))}  type={minusIcon.type} color={minusIcon.color} className=' m-0 h-6 w-6 hover:bg-gray-500'></Icon>
                             </td>
                         </tr>)}
                     </tbody>
@@ -139,7 +150,7 @@ export const SaleForm = (props) => {
                         <tr>
                             <td className="p-4 pl-0"> <Icon onclick={(e) => AddItem(e)} type={plusIcon.type} color={plusIcon.color} className=' m-0 h-6 w-6 hover:bg-gray-500'></Icon></td>
                             <td className="text-yellow-500 text-base font-bold"><p >Total:</p></td>
-                            <td className=" text-green-500 text-base font-bold"><p>{ARSConverter(itemList.reduce(reducer,{subTotal:0}).subTotal)}</p></td>
+                            <td className=" text-green-500 text-base font-bold"><p>{ARSConverter(totalVenta)}</p></td>
                         </tr>
                     </tfoot>   
             </table>

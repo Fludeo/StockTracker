@@ -1,3 +1,5 @@
+const { fromPostToProductEntity } = require('../mapper/productMapper');
+
 module.exports = class ProductController {
   constructor(productService) {
     this.productService = productService;
@@ -11,6 +13,7 @@ module.exports = class ProductController {
     app.post(`${BASEROUTE}/addproduct`, this.addProduct.bind(this));
     app.post(`${BASEROUTE}/deleteproduct`, this.deleteProduct.bind(this));
     app.post(`${BASEROUTE}/updateproduct`, this.updateProduct.bind(this));
+    app.post(`${BASEROUTE}/addstockproduct`, this.addStockProduct.bind(this));
   }
 
   /**
@@ -42,11 +45,25 @@ module.exports = class ProductController {
  */
 
   async addProduct(req, res) {
-    const newProduct = req.body;
+    const { descripcion, precioCosto } = req.body;
 
+    const newProduct = fromPostToProductEntity({ descripcion, precioCosto });
     await this.productService.addProduct(newProduct);
 
     res.sendStatus(200);
+  }
+
+  async updateProduct(req, res) {
+    const product = req.body;
+    const productEntity = fromPostToProductEntity(product);
+    try {
+      await this.productService.updateProduct(productEntity);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error(err);
+      res.status(500);
+      res.json({ error: err });
+    }
   }
 
   async deleteProduct(req, res) {
@@ -57,9 +74,10 @@ module.exports = class ProductController {
     res.sendStatus(200);
   }
 
-  async updateProduct(req, res) {
+  async addStockProduct(req, res) {
     const product = req.body;
-    await this.productService.updateProduct(product);
+    const productEntity = fromPostToProductEntity(product);
+    await this.productService.addStockProduct(productEntity);
 
     res.sendStatus(200);
   }

@@ -13,8 +13,17 @@ module.exports = class ProductService {
     return data;
   }
 
+  async addStockProduct(product) {
+    const dbProduct = await this.productRepository.getById(product.id);
+    dbProduct.stock += product.stock;
+    await this.productRepository.updateProduct(dbProduct);
+  }
+
   async updateProduct(product) {
-    await this.productRepository.updateProduct(product);
+    const dbProduct = await this.productRepository.getById(product.id);
+    if (product.precioCosto !== 0)dbProduct.precioCosto = product.precioCosto;
+    if (product.precioModificador !== 0)dbProduct.precioModificador = product.precioModificador;
+    await this.productRepository.updateProduct(dbProduct);
   }
 
   async deleteProduct(product) {

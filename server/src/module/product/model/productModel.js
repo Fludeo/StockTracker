@@ -31,7 +31,7 @@ module.exports = class ProductModel extends Model {
         defaultValue: 0,
       },
     }, {
-      tableName: 'Products',
+      tableName: 'products',
       sequelize: sequelizeInstance, // We need to pass the connection instance
       modelName: 'Product', // We need to choose the model name
     });

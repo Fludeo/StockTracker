@@ -51,10 +51,10 @@ function addProductDefinitions(container) {
 }
 function addSaleDefinitions(container) {
   container.addDefinitions({
-    SaleController: object(SaleController).construct(get('ProductService')),
-    SaleService: object(SaleService).construct(get('SaleRepository')),
+    SaleController: object(SaleController).construct(get('SaleService'), get('ProductService')),
+    SaleService: object(SaleService).construct(get('SaleRepository'), get('ProductRepository')),
     SaleModel: factory(configureSaleModel),
-    SaleRepository: object(SaleRepository).construct(get('SaleModel')),
+    SaleRepository: object(SaleRepository).construct(get('SaleModel'), get('ProductModel')),
   });
 }
 /**

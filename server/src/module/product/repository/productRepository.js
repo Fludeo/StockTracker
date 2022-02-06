@@ -1,3 +1,4 @@
+const FailToUpdateProductError = require('../error/FailToUpdateProduct');
 const { fromProductModelToEntity } = require('../mapper/productMapper');
 
 module.exports = class ProductRepository {
@@ -9,23 +10,26 @@ module.exports = class ProductRepository {
     this.productModel = productModel;
   }
 
-  async updateProduct(product) {
-    const productInstance = await this.productModel.findByPk(product.id);
-    if (product.stock !== '') { productInstance.stock = Number(productInstance.stock) + Number(product.stock); }
-    if (product.descripcion !== '') { productInstance.descripcion = product.descripcion; }
-    if (product.precio !== '') { productInstance.precioCosto = Number(product.precio); }
-    if (product.modificador !== '') { productInstance.precioModificador = Number(product.modificador); }
+  async updateProduct(product, t) {
+    try {
+      const productInstance = await this.productModel.findByPk(product.id);
 
-    await productInstance.save();
+      await productInstance.update({
+        stock: Number(product.stock),
+        descripcion: product.descripcion,
+        precioCosto: Number(product.precioCosto),
+        precioModificador: Number(product.precioModificador),
+      }, { transaction: t });
+    } catch (err) {
+      throw new FailToUpdateProductError(`No se pudo actualizar producto: ${product.descripcion}`);
+    }
   }
 
   async addProduct(product) {
-    const newProduct = await this.productModel.build({
+    await this.productModel.create({
       descripcion: product.descripcion,
-      precioCosto: Number(product.precio),
-    });
-
-    await newProduct.save();
+      precioCosto: Number(product.precioCosto),
+    }, { isNewRecord: true });
   }
 
   async deleteProduct(product) {

@@ -9,10 +9,14 @@ module.exports = class ProductListModel extends Model {
         allowNull: false,
         primaryKey: true,
         unique: true,
-        // autoIncrement: true,
+        autoIncrement: true,
       },
       quantity: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      subTotal: {
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
 
