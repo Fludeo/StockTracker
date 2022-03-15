@@ -3,7 +3,7 @@
   Venta y actualización de stock , alertas y estadísticas. 
   
  # Client
-   Frontend realizado con React y Tailwind CSS 
+   Frontend realizado con React, Tailwind CSS y principios UX/UI
    
  # Server 
    Backend realizado con Node.js Express.js aplicando los principios SOLID y el paquete RSDI (Dependency injection container) para lograr una arquitectura MVC escalable y mantenible en el tiempo. 
