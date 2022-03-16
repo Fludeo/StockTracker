@@ -1,4 +1,4 @@
-# StockTracker (en construcción)
+# StockTracker (en desarrollo)
   App simple para manejo de un negocio.
   Venta actualización de stock , alertas y estadísticas. 
   
