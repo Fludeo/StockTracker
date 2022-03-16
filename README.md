@@ -2,8 +2,7 @@
   Proyecto personal.   
   App simple para manejo de un negocio.  
   Venta, actualización de stock , alertas y estadísticas. 
-  # Objetivos
-   Materializar todos los conocimientos aprendidos en mi formación y futuros, en un proyecto   en constante expansión usando las mejores prácticas y estándares de la industria.
+
  # Client
    Frontend realizado con React, Tailwind CSS, ApexCharts.js y principios UX/UI
    
