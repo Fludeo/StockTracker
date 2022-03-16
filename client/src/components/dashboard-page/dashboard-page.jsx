@@ -1,59 +1,86 @@
 import fetchData from "../../customhooks/fetchData"
 import { useEffect, useState } from "react"
 import { LastSales } from "./last-sales"
+import { HoverList } from "./hover-list"
+import { StockAlert } from "./stock-alert"
+import { HeatMap } from "./graph-section"
+
 
 
 export const DashBoardPage = (props) => {
-    const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
-  
+    const [saleData, setSaleData] = useState(null)
+    const [saleLoading, setSaleLoading] = useState(true)
+    const [saleError, setSaleError] = useState(false)
+
+    const [productData, setProductData] = useState(null)
+    const [productLoading, setProductLoading] = useState(true)
+    const [productError, setProductError] = useState(false)
+
+
+    const [hoverList,sethoverList] = useState(false)
     
 
 
+
+
+
+
+    
+    
   
   
-  
-  
-  
-  
+    
+
     useEffect(() => {
      
-      fetchData('/sale/get/all', setData, setLoading, setError)
-  
+    fetchData('/sale/get/all', setSaleData, setSaleLoading, setSaleError)
+
+    fetchData('/product/get/all',setProductData,setProductLoading,setProductError)
+    
+    
     }, [])
   
   
   
   
   
-    return (loading ? 'Cargando' : error ? 'Error' :
-      <main className='md:w-5/6 w-full h-screen bg-gray-600  flex flex-col '>
+    return (
+      <main className='md:w-5/6  w-full h-screen bg-gray-50 grid md:grid-cols-2 grid-cols-1 grid-rows-2  gap-4 p-4  '>
   
-  <div className=" w-full h-1/2 flex flex-row ">
-        <section className=' mb-2 mr-2 m-4 w-1/2  bg-gray-500 rounded-xl'>
+  
+      
+  <section className=' md:w-full w-full md:h-full h-full flex flex-col gap-4 rounded-md '>
+       {saleLoading? 'Cargando': saleError ? 'Error':<LastSales className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  " setHoverList={sethoverList} data ={saleData} ></LastSales>}
+       {productLoading? 'Cargando': productError ? 'Error':<StockAlert className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  "  data ={productData} ></StockAlert>}
+  </section>
+  
 
-       <LastSales data ={data} ></LastSales>
+   
+       <section className='  md:w-full w-full md:h-full h-1/2 overflow-auto md:border border rounded-md bg-gray-100'>
+       {(hoverList!==false)?<HoverList  hoverList ={hoverList}></HoverList>:saleData!=null&&<HeatMap data={saleData}></HeatMap> }
+      
+       </section>
+
+       <section className=' md:col-span-2  md:w-full w-full md:h-full h-1/2 gap-4 flex flex-col   rounded-md '>
+       <div className='  md:w-full w-full md:h-3/4 h-1/2  md:border border rounded-md bg-gray-100'>
+      
+      
+      </div>
+       <div className='  md:w-full w-full md:h-1/4 h-1/4  md:border border rounded-md bg-gray-100'>
+      
+      
+      </div>
+       </section>
+
+     
+
+      
+        
+        
          
-        </section>
-        <section className='mb-2 ml-2 m-4 w-1/2  bg-gray-500 rounded-xl'>
+ 
   
-  
-         
-  </section>
-  </div>
-  <div className="w-full h-1/2 flex flex-row ">
-  <section className=' mt-2 mr-2 m-4 w-1/2  bg-gray-500 rounded-xl'>
-  
-  
-         
-  </section>
-  <section className=' mt-2 m-4 ml-2 w-1/2  bg-gray-500 rounded-xl'>
-  
-  
-         
-  </section>
-  </div>
+
 
        
       </main>

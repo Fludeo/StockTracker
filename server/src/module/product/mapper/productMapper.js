@@ -26,7 +26,7 @@ exports.fromPostToProductEntity = ({
   descripcion,
   stock = 0,
   precioCosto = 0,
-  precioModificador = 0,
+  precioModificador = 25,
   createdAt = null,
   updatedAt = null,
   deletedAt = null,

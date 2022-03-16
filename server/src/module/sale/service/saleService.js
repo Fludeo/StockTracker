@@ -10,6 +10,12 @@ module.exports = class SaleService {
     return this.saleRepository.getById(id);
   }
 
+  async getBetweenDatesSales(startDate, endDate) {
+    const data = await this.saleRepository.getBetweenDatesSales(startDate, endDate);
+
+    return data;
+  }
+
   async getAllSales() {
     const data = await this.saleRepository.getAllSales();
     return data;

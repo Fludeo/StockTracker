@@ -13,6 +13,8 @@ module.exports = class ProductController {
     app.post(`${BASEROUTE}/addproduct`, this.addProduct.bind(this));
     app.post(`${BASEROUTE}/deleteproduct`, this.deleteProduct.bind(this));
     app.post(`${BASEROUTE}/updateproduct`, this.updateProduct.bind(this));
+    app.post(`${BASEROUTE}/updateproduct/price`, this.updateProductPrice.bind(this));
+    app.post(`${BASEROUTE}/updateproduct/priceMod`, this.updateProductPriceModifier.bind(this));
     app.post(`${BASEROUTE}/addstockproduct`, this.addStockProduct.bind(this));
   }
 
@@ -45,9 +47,9 @@ module.exports = class ProductController {
  */
 
   async addProduct(req, res) {
-    const { descripcion, precioCosto } = req.body;
+    const product = req.body;
 
-    const newProduct = fromPostToProductEntity({ descripcion, precioCosto });
+    const newProduct = fromPostToProductEntity(product);
     await this.productService.addProduct(newProduct);
 
     res.sendStatus(200);
@@ -60,7 +62,31 @@ module.exports = class ProductController {
       await this.productService.updateProduct(productEntity);
       res.sendStatus(200);
     } catch (err) {
-      console.error(err);
+      res.status(500);
+      res.json({ error: err });
+    }
+  }
+
+  async updateProductPrice(req, res) {
+    const product = req.body;
+    const productEntity = fromPostToProductEntity(product);
+    try {
+      await this.productService.updateProductPrice(productEntity);
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(500);
+      res.json({ error: err });
+    }
+  }
+
+  async updateProductPriceModifier(req, res) {
+    const product = req.body;
+    const productEntity = fromPostToProductEntity(product);
+    console.log(productEntity);
+    try {
+      await this.productService.updateProductPriceModifier(productEntity);
+      res.sendStatus(200);
+    } catch (err) {
       res.status(500);
       res.json({ error: err });
     }

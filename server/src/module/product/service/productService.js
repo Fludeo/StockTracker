@@ -26,6 +26,18 @@ module.exports = class ProductService {
     await this.productRepository.updateProduct(dbProduct);
   }
 
+  async updateProductPrice(product) {
+    const dbProduct = await this.productRepository.getById(product.id);
+    if (product.precioCosto > 0)dbProduct.precioCosto = product.precioCosto;
+    await this.productRepository.updateProduct(dbProduct);
+  }
+
+  async updateProductPriceModifier(product) {
+    const dbProduct = await this.productRepository.getById(product.id);
+    if (product.precioModificador > 0)dbProduct.precioModificador = product.precioModificador;
+    await this.productRepository.updateProduct(dbProduct);
+  }
+
   async deleteProduct(product) {
     await this.productRepository.deleteProduct(product);
   }

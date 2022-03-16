@@ -1,11 +1,12 @@
+const { Op } = require('sequelize');
 const FailToSaveSaleError = require('../error/FailToSaveSaleError');
-
 const { fromSaleModelToEntity } = require('../mapper/saleMapper');
 
 module.exports = class SaleRepository {
   /**
    *
    * @param {typeof import('../model/saleModel')} saleModel
+   * @param {typeof import('../../product/model/productModel')} productModel
    */
   constructor(saleModel, productModel) {
     this.saleModel = saleModel;
@@ -28,6 +29,7 @@ module.exports = class SaleRepository {
         await newSale.addProduct(product, {
           through: {
             quantity: item.quantity,
+            descuento: item.descuento,
             subTotal: item.subTotal,
           },
         }, { transaction: t });
@@ -52,7 +54,37 @@ module.exports = class SaleRepository {
     const allSales = await this.saleModel.findAll({ include: { model: this.productModel } });
 
     return allSales.map((sale) => fromSaleModelToEntity(
-      { ...sale, listaProductos: sale.Products },
+      {
+        id: sale.id,
+        totalVenta: sale.totalVenta,
+        ganancia: sale.ganancia,
+        listaProductos: sale.Products,
+        updatedAt: sale.updatedAt,
+        createdAt: sale.createdAt,
+      },
+    ));
+  }
+
+  async getBetweenDatesSales(startDate, endDate) {
+    const rangeSales = await this.saleModel.findAll({
+      where:
+       {
+         createdAt: {
+           [Op.between]: [endDate, startDate],
+         },
+       },
+    });
+
+    rangeSales.map((sale) => console.log(sale));
+    return rangeSales.map((sale) => fromSaleModelToEntity(
+      {
+        id: sale.id,
+        totalVenta: sale.totalVenta,
+        ganancia: sale.ganancia,
+        listaProductos: sale.Products,
+        updatedAt: sale.updatedAt,
+        createdAt: sale.createdAt,
+      },
     ));
   }
 };

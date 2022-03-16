@@ -15,6 +15,10 @@ module.exports = class ProductListModel extends Model {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      descuento: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
       subTotal: {
         type: DataTypes.FLOAT,
         allowNull: false,

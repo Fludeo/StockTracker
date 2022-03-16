@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useHistory } from "react-router";
 import { Icon } from "./Icon";
 import { PopUp } from "./popup";
-import ARSConverter from "../../customhooks/helperFunctions"
+import {ARSConverter} from "../../customhooks/helperFunctions"
 
 
 
@@ -77,7 +77,7 @@ export const Table = (props) => {
               <td className=' px-6 py-2 text-xs ' >{content.id}</td>
               <td className=' px-6 py-2 text-xs md:text-sm' >{content.descripcion}</td>
               <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2 '><p>{content.stock}</p><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon></div></td>
-              <td className='  px-6 py-2 text-xs ' >{ARSConverter(content.precioCosto * (1.25 + (content.precioModificador / 100)))}</td>
+              <td className='  px-6 py-2 text-xs ' >{ARSConverter(content.precioCosto * (1.0 + (content.precioModificador / 100)))}</td>
               <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2'><p>{ARSConverter(content.precioCosto)}</p><Icon onclick={() => props.updatePrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
               <td className='  px-6 py-2 text-xs '><div className='flex flex-row gap-2'><p>{content.precioModificador}</p><Icon onclick={() => props.updateModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
             </tr>)}

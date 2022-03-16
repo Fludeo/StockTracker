@@ -109,7 +109,7 @@ export const StockPage = (props) => {
   async function handleUpdatePriceSubmit(e) {
     e.preventDefault()
     try {
-      const response = await fetch('/product/updateproduct', {
+      const response = await fetch('/product/updateproduct/price', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -128,7 +128,7 @@ export const StockPage = (props) => {
   async function handleUpdateModifierSubmit(e) {
     e.preventDefault()
     try {
-      const response = await fetch('/product/updateproduct', {
+      const response = await fetch('/product/updateproduct/priceMod', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

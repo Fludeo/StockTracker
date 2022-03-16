@@ -25,7 +25,7 @@ module.exports = class Product {
   }
 
   getFinalPrice() {
-    const finalPrice = (this.precioCosto * ((this.precioModificador / 100) + 1.25));
+    const finalPrice = (this.precioCosto * ((this.precioModificador / 100) + 1.0));
     return finalPrice;
   }
 

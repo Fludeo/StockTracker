@@ -29,6 +29,7 @@ module.exports = class ProductRepository {
     await this.productModel.create({
       descripcion: product.descripcion,
       precioCosto: Number(product.precioCosto),
+      precioModificador: Number(product.precioModificador),
     }, { isNewRecord: true });
   }
 

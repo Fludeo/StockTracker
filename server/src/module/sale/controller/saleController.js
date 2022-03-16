@@ -14,6 +14,7 @@ module.exports = class SaleController {
   configureRoutes(app) {
     const BASEROUTE = this.BASE_ROUTE;
     app.get(`${BASEROUTE}/get/all`, this.getAllSales.bind(this));
+    app.get(`${BASEROUTE}/get/daterange/:from/:to`, this.getBetweenDatesSales.bind(this));
     app.post(`${BASEROUTE}/new`, this.newSale.bind(this));
   }
   /**
@@ -43,9 +44,10 @@ module.exports = class SaleController {
     try {
       const subtotales = listaProductos.map(async (item) => {
         const product = await this.productService.getById(item.itemId);
-        const result = product.getFinalPrice() * item.quantity;
+        const result = (product.getFinalPrice() * (1.0 + (-item.descuento / 100)) * item.quantity);
         listSubtotals.push(item);
         listSubtotals[listSubtotals.indexOf(item)].product = product;
+        listSubtotals[listSubtotals.indexOf(item)].descuento = item.descuento;
         listSubtotals[listSubtotals.indexOf(item)].subTotal = result;
         return result;
       });
@@ -68,6 +70,25 @@ module.exports = class SaleController {
       res.sendStatus(200);
     } catch (err) {
       res.status(500);
+      res.json({ error: err });
+    }
+  }
+
+  /**
+ *
+ * @param {import('express'.Request)} req
+ * @param {import('express').Response} res
+ */
+  async getBetweenDatesSales(req, res) {
+    const startDate = new Date(req.params.from);
+    const endDate = new Date(req.params.to);
+
+    try {
+      const sales = await this.saleService.getBetweenDatesSales(startDate, endDate);
+      res.json(sales);
+    } catch (err) {
+      res.status(500);
+      console.log(err.message);
       res.json({ error: err });
     }
   }
