@@ -1,6 +1,6 @@
 # StockTracker (en construcción)
   App simple para manejo de un negocio.
-  Venta y actualización de stock , alertas y estadísticas. 
+  Venta actualización de stock , alertas y estadísticas. 
   
  # Client
    Frontend realizado con React, Tailwind CSS y principios UX/UI
