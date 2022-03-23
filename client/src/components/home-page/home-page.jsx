@@ -1,12 +1,12 @@
 import { Navbar } from "./navbar";
 import { useHistory, Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { StockPage } from "../stock-page/stock-page";
-import LoginPage from "../login-page/loginPage";
+
 import { useState } from "react";
-import { errorMessage } from "../common/errorMessage";
+
 import { Icon } from "../common/Icon";
 import { PopUp } from "../common/popup";
-import { SaleForm } from "../common/form";
+import { SaleForm } from "../common/sale-form";
 import { DashBoardPage } from "../dashboard-page/dashboard-page";
 
 

@@ -1,52 +1,50 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import fetchData from "../../customhooks/fetchData"
-import { AddProductForm, SimpleForm } from "../common/form"
+import { AddProductForm, SimpleForm } from "./forms"
 import { PopUp } from "../common/popup"
 import { Table } from "../common/table"
 
 
+const initialState ={}
 
+const stockReducer =(state,action)=>{
 
+  
 
+  let newState ={};
+  switch(action.type){
+    case'UPDATE_VALUE':
+    newState ={...state}
+    newState[action.payload.field] = action.payload.updatedValue
+    return newState
 
+   
+    case'POPUP':
+    newState = {...state}
+    newState[action.payload.popup] = action.payload.trigger
+    newState.productInfo = action.payload.productInfo
+    return newState
 
+  
+    
+    default:
+      return null
+    
+    
+      }
 
+    
+}
 
 
 export const StockPage = (props) => {
+
+  
+
+  const [state,dispatch] = useReducer(stockReducer,initialState)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-
-  const [popupContent, setPopupcontent] = useState('')
-  const [formContent, setFormContent] = useState('')
-  const [stockPopup, setStockPopup] = useState(false)
-  const [updateModifierPopup, setUpdateModifierPopup] = useState(false)
-  const [deleteProductPopup, setDeleteProductPopup] = useState(false)
-  const [productPopup, setProductPopup] = useState(false)
-
-  const [updatePricePopup, setUpdatePricePopup] = useState('')
-
-  function addStock(productData) {
-    setPopupcontent(productData)
-    setStockPopup(true)
-  }
-  function addProduct(productData) {
-
-    setProductPopup(true)
-  }
-
-  function deleteProduct() {
-    setDeleteProductPopup(true)
-  }
-  function updatePriceProduct(productData) {
-    setPopupcontent(productData)
-    setUpdatePricePopup(true)
-  }
-  function updateModifierProduct(productData) {
-    setPopupcontent(productData)
-    setUpdateModifierPopup(true)
-  }
 
 
   async function handleStockSubmit(e) {
@@ -58,52 +56,12 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precio: '', stock: formContent.updatedValue, descripcion: '', modificador: '' }),
+        body: JSON.stringify({ id: state.productInfo.id, precio: '', stock: state.updatedValue, descripcion: '', modificador: '' }),
       })
-      props.history.go(0)
+      if(response.ok) props.history.go(0)
     }
     catch (err) {
-      props.history.push('/aaaa')
-      console.log(err)
-
-    }
-  }
-  async function handleProductSubmit(e) {
-    e.preventDefault()
-    try {
-      const response = await fetch('/product/addproduct', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formContent),
-      })
-      props.history.go(0)
-    }
-    catch (err) {
-      props.history.push('/aaaa')
-      console.log(err)
-
-    }
-  }
-  async function handleDeleteProductSubmit(e) {
-    e.preventDefault()
-    try {
-      const response = await fetch('/product/deleteproduct', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ...formContent, id: formContent.updatedValue }),
-      })
-      props.history.go(0)
-    }
-    catch (err) {
-      props.history.push('/aaaa')
-      console.log(err)
-
+     console.log(err)
     }
   }
   async function handleUpdatePriceSubmit(e) {
@@ -115,16 +73,16 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precioCosto: formContent.updatedValue, stock: '', descripcion: '', precioModificador: 0 }),
+        body: JSON.stringify({ id: state.productInfo.id, precioCosto: state.updatedValue, stock: '', descripcion: '', precioModificador: 0 }),
       })
-      props.history.go(0)
+     if(response.ok) props.history.go(0)
     }
     catch (err) {
-      props.history.push('/aaaa')
       console.log(err)
 
     }
   }
+
   async function handleUpdateModifierSubmit(e) {
     e.preventDefault()
     try {
@@ -134,18 +92,54 @@ export const StockPage = (props) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: popupContent.id, precioCosto: 0, stock: 0, descripcion: '', precioModificador: formContent.updatedValue }),
+        body: JSON.stringify({ id: state.productInfo.id, precioCosto: 0, stock: 0, descripcion: '', precioModificador: state.updatedValue }),
       })
-      props.history.go(0)
+      if(response.ok) props.history.go(0)
     }
     catch (err) {
-      props.history.push('/aaaa')
+      console.log(err)
+      
+
+    }
+  }
+
+  async function handleProductSubmit(e) {
+    e.preventDefault()
+    try {
+      const response = await fetch('/product/addproduct', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({precioCosto:state.price, descripcion:state.description}),
+      })
+      if(response.ok) props.history.go(0)
+    }
+    catch (err) {
       console.log(err)
 
     }
   }
 
+  async function handleDeleteProductSubmit(e) {
+    e.preventDefault()
+    try {
+      const response = await fetch('/product/deleteproduct', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: state.updatedValue }),
+      })
+      if(response.ok) props.history.go(0)
+    }
+    catch (err) {
+      console.log(err)
 
+    }
+  }
 
 
 
@@ -167,26 +161,57 @@ export const StockPage = (props) => {
 
       <section className=' m-0 w-full flex flex-col overflow-auto'>
 
-
-        <Table addStock={addStock} addProduct={addProduct} deleteProduct={deleteProduct} updatePrice={updatePriceProduct} updateModifier={updateModifierProduct} tableContent={data} ></Table>
+        <Table
+        deleteProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupDeleteProduct',trigger:true ,productInfo:{}}})} 
+        addProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupAddProduct',trigger:true ,productInfo:{}}})}  
+        addStock={(content)=>dispatch({type:'POPUP', payload:{popup:'popupAddStock',trigger:true,productInfo:content}})} 
+        editPrice={(content)=>dispatch({type:'POPUP', payload:{popup:'popupEditPrice',trigger:true,productInfo:content}})}
+        editModifier={(content)=>dispatch({type:'POPUP', payload:{popup:'popupEditModifier',trigger:true,productInfo:content}})}
+        tableContent={data}>
+        </Table>
       </section>
-      <PopUp trigger={stockPopup}>
-        <SimpleForm inputType="number" formTitle="Agregar Stock del producto:" setPopup={setStockPopup} setFormContent={setFormContent} handleSubmit={handleStockSubmit} formContent={formContent} popupContent={popupContent} ></SimpleForm>
+
+      <PopUp trigger={state.popupAddStock}>
+        <SimpleForm inputType="number" formTitle="Agregar Stock del producto:"  
+        closePopup={()=>dispatch({type:'POPUP', payload:{popup:'popupAddStock',trigger:false,productInfo:{}}})} 
+        updateValue={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value, field:'updatedValue'}})} 
+        handleSubmit={(e)=> handleStockSubmit(e)} productInfo={state.productInfo} >
+        </SimpleForm>
       </PopUp>
-      <PopUp trigger={productPopup}>
-        <AddProductForm setProductPopup={setProductPopup} setFormContent={setFormContent} handleProductSubmit={handleProductSubmit} formContent={formContent} ></AddProductForm>
+      <PopUp trigger={state.popupAddProduct}>
+        <AddProductForm 
+        description={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value, field:'description'}})}  
+        price={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value, field:'price'}})} 
+        handleSubmit={(e)=>handleProductSubmit(e)}
+        closePopup={()=>dispatch({type:'POPUP', payload:{popup:'popupAddProduct',trigger:false,productInfo:{}}})} 
+        >
+        </AddProductForm>
       </PopUp>
-      <PopUp trigger={deleteProductPopup}>
-        <SimpleForm inputType="number" formTitle="Ingrese Id del producto a eliminar:" setPopup={setDeleteProductPopup} setFormContent={setFormContent} handleSubmit={handleDeleteProductSubmit} formContent={formContent} popupContent={""} ></SimpleForm>
+      <PopUp trigger={state.popupDeleteProduct}>
+        <SimpleForm inputType="number" formTitle="Ingrese Id del producto a eliminar:" 
+        closePopup={()=>dispatch({type:'POPUP', payload:{popup:'popupDeleteProduct',trigger:false,productInfo:{}}})} 
+        updateValue={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value, field:'updatedValue'}})} 
+        handleSubmit={(e)=>handleDeleteProductSubmit(e)}>
+        </SimpleForm>
       </PopUp>
-      <PopUp trigger={updatePricePopup}>
-        <SimpleForm inputType="number" formTitle="Cambiar precio del producto:" setPopup={setUpdatePricePopup} setFormContent={setFormContent} handleSubmit={handleUpdatePriceSubmit} popupContent={popupContent} ></SimpleForm>
+      <PopUp trigger={state.popupEditPrice}>
+      <SimpleForm inputType="number" formTitle="Cambiar Precio del producto:"  
+        closePopup={()=>dispatch({type:'POPUP', payload:{popup:'popupEditPrice',trigger:false,productInfo:{}}})} 
+        updateValue={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value, field:'updatedValue'}})} 
+        handleSubmit={(e)=>handleUpdatePriceSubmit(e)} productInfo={state.productInfo} >
+        </SimpleForm>
       </PopUp>
-      <PopUp trigger={updateModifierPopup}>
-        <SimpleForm inputType="number" formTitle="Cambiar modificador del producto:" setPopup={setUpdateModifierPopup} setFormContent={setFormContent} handleSubmit={handleUpdateModifierSubmit} popupContent={popupContent} ></SimpleForm>
+      <PopUp trigger={state.popupEditModifier}>
+      <SimpleForm inputType="number" formTitle="Cambiar Modificador del producto:"  
+        closePopup={()=>dispatch({type:'POPUP', payload:{popup:'popupEditModifier',trigger:false,productInfo:{}}})} 
+        updateValue={(e)=>dispatch({type:'UPDATE_VALUE',payload:{updatedValue:e.currentTarget.value , field:'updatedValue'}})} 
+        handleSubmit={(e)=>handleUpdateModifierSubmit(e)} productInfo={state.productInfo}>
+        </SimpleForm>
       </PopUp>
+   
     </main>
   )
 }
+
 
 
