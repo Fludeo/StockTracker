@@ -65,11 +65,11 @@ useEffect(()=>{
 <div className={props.className} id="chart">
 
 {series!=null&&<ReactApexChart options={options} series={series} type="heatmap" height={350} />}
-<div class="flex flex-row">
-  <button onClick={()=>setNumWeeks(numWeeks+1)} class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold  py-2 px-4 rounded-l">
+<div className="flex flex-row">
+  <button onClick={()=>setNumWeeks(numWeeks+1)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold  py-2 px-4 rounded-l">
     Ant
   </button>
-  <button onClick={()=>setNumWeeks(numWeeks-1)} class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
+  <button onClick={()=>setNumWeeks(numWeeks-1)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
     Sig
   </button>
 </div>

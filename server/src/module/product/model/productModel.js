@@ -13,6 +13,7 @@ module.exports = class ProductModel extends Model {
       },
       descripcion: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
       },
       precioCosto: {

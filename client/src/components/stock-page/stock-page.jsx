@@ -64,6 +64,7 @@ export const StockPage = (props) => {
      console.log(err)
     }
   }
+  
   async function handleUpdatePriceSubmit(e) {
     e.preventDefault()
     try {
@@ -160,7 +161,6 @@ export const StockPage = (props) => {
 
 
       <section className=' m-0 w-full flex flex-col overflow-auto'>
-
         <Table
         deleteProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupDeleteProduct',trigger:true ,productInfo:{}}})} 
         addProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupAddProduct',trigger:true ,productInfo:{}}})}  
