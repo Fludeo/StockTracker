@@ -72,6 +72,7 @@ const saleFormReducer =(state,action)=>{
         case'DELETE_ITEM':
         newState ={...state}
         newState.itemList = action.payload
+        newState.saleTotal = calcTotal(newState.itemList)
         return newState;
 
         default:
