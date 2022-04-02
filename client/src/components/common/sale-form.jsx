@@ -13,16 +13,22 @@ const initialState = {
                                 {
                                 product:{id:"",precioCosto:0,precioModificador:0},
                                 quantity:0, 
-                                subTotal:0, 
-                                discount:0 
+                                subTotal:0,
+                                discount:0, 
+                                costSubTotal:0 
                                 }
                                  ],
-                        saleTotal:0
+                        saleTotal:0,
+                        costSaleTotal:0
                         }
 
 function subTotal(quantity,discount,price,priceMod){
     const subTotal =  (((((price * (1.0 + (priceMod) / 100) * (1.0 + (-discount) / 100)))*quantity)))
     return subTotal
+}
+function costSubTotal(quantity,price){
+    const costSubTotal =  (price *quantity)
+    return costSubTotal
 }
 
 function calcTotal(list){
@@ -41,6 +47,23 @@ function calcTotal(list){
     }
     
 }
+function calcCostTotal(list){
+
+    if(list!=null)
+    {
+      const costTotal =  list.reduce((previousItem,currentItem)=>{
+  
+                      let result = {costSubTotal: previousItem.costSubTotal + currentItem.costSubTotal}
+            
+                         return result;
+                     },{costSubTotal:0}).costSubTotal
+        
+         return costTotal
+
+    }
+    
+}
+
 
 
 const saleFormReducer =(state,action)=>{
@@ -53,11 +76,17 @@ const saleFormReducer =(state,action)=>{
         newState ={...state}
         newState.itemList[newState.itemList.indexOf(action.payload.item)][action.payload.field]=action.payload.value;
         newState.itemList[newState.itemList.indexOf(action.payload.item)]['subTotal'] = 
-                    subTotal(newState.itemList[newState.itemList.indexOf(action.payload.item)]['quantity'] ,
+                    subTotal(
+                    newState.itemList[newState.itemList.indexOf(action.payload.item)]['quantity'] ,
                     newState.itemList[newState.itemList.indexOf(action.payload.item)]['discount'],
                     newState.itemList[newState.itemList.indexOf(action.payload.item)]['product'].precioCosto,
                     newState.itemList[newState.itemList.indexOf(action.payload.item)]['product'].precioModificador)
+                    newState.itemList[newState.itemList.indexOf(action.payload.item)]['costSubTotal'] = 
+                    costSubTotal(
+                            newState.itemList[newState.itemList.indexOf(action.payload.item)]['quantity'] ,
+                            newState.itemList[newState.itemList.indexOf(action.payload.item)]['product'].precioCosto)
                     newState.saleTotal = calcTotal(newState.itemList)
+                    newState.costSaleTotal = calcCostTotal(newState.itemList)
         
         console.log(newState.itemList)
         return newState
@@ -73,6 +102,7 @@ const saleFormReducer =(state,action)=>{
         newState ={...state}
         newState.itemList = action.payload
         newState.saleTotal = calcTotal(newState.itemList)
+        newState.costSaleTotal = calcCostTotal(newState.itemList)
         return newState;
 
         default:
@@ -122,7 +152,9 @@ export const SaleForm = (props) => {
    async function  SalePost(e)
     {
         e.preventDefault();
-        const finalList ={listaProductos:state.itemList}
+        const finalList ={productList:state.itemList,
+                          saleTotal: state.saleTotal,
+                        totalEarn: state.saleTotal - state.costSaleTotal}
         try {
            const response =  await fetch('/sale/new', {
               method: 'POST',

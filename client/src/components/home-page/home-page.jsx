@@ -2,7 +2,6 @@ import { Navbar } from "./navbar";
 import { useHistory, Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { StockPage } from "../stock-page/stock-page";
 import { useState } from "react";
-
 import { Icon } from "../common/Icon";
 import { PopUp } from "../common/popup";
 import { SaleForm } from "../common/sale-form";
