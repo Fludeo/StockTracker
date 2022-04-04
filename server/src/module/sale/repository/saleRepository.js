@@ -24,12 +24,12 @@ module.exports = class SaleRepository {
         totalVenta: sale.totalVenta,
       }, { isNewRecord: true }, { transaction: t });
       const loop = await sale.listaProductos.map(async (item) => {
-        const product = await this.productModel.findByPk(item.itemId);
+        const product = await this.productModel.findByPk(item.product.id);
 
         await newSale.addProduct(product, {
           through: {
             quantity: item.quantity,
-            descuento: item.descuento,
+            discount: item.discount,
             subTotal: item.subTotal,
           },
         }, { transaction: t });

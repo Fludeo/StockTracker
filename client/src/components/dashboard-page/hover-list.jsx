@@ -35,7 +35,7 @@ import {ARSConverter} from "../../customhooks/helperFunctions";
                     <td className="px-6 py-2 text-xs">{product.id}</td>
                     <td className="px-6 py-2 text-xs">{product.descripcion}</td>
                     <td className="px-6 py-2 text-xs">{product.ProductList.quantity}</td>
-                    <td className="px-6 py-2 text-xs">{product.ProductList.descuento}</td>
+                    <td className="px-6 py-2 text-xs">{product.ProductList.discount}</td>
                     <td className="px-6 py-2 text-xs">{ARSConverter(product.ProductList.subTotal)}</td>
                 </tr>)}
             </tbody>

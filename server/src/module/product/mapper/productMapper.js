@@ -21,7 +21,7 @@ exports.fromProductModelToEntity = ({
   deletedAt,
 );
 
-exports.fromPostToProductEntity = ({
+exports.fromDtoToProductEntity = ({
   id = null,
   descripcion,
   stock = 0,

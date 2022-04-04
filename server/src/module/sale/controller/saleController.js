@@ -1,5 +1,5 @@
 const SaleDto = require('../mapper/dto/sale-dto');
-const { fromPostToSaleEntity } = require('../mapper/saleMapper');
+const { fromDtoToSaleEntity } = require('../mapper/saleMapper');
 /**
  *
  * @param {import('../service/saleService')} saleService
@@ -42,8 +42,15 @@ module.exports = class SaleController {
 
   async newSale(req, res) {
     const saleDto = new SaleDto(req.body);
-    console.log(saleDto);
-    res.sendStatus(200);
+    const newSale = fromDtoToSaleEntity(saleDto);
+
+    try {
+      await this.saleService.addNewSale(newSale);
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(500);
+      res.json({ error: err });
+    }
   }
 
   /**
@@ -60,7 +67,6 @@ module.exports = class SaleController {
       res.json(sales);
     } catch (err) {
       res.status(500);
-      console.log(err.message);
       res.json({ error: err });
     }
   }

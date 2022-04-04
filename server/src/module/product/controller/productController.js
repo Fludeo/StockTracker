@@ -1,4 +1,5 @@
-const { fromPostToProductEntity } = require('../mapper/productMapper');
+const { fromDtoToProductEntity } = require('../mapper/productMapper');
+const ProductDto = require('../mapper/Dto/product-dto');
 
 module.exports = class ProductController {
   constructor(productService) {
@@ -47,17 +48,17 @@ module.exports = class ProductController {
  */
 
   async addProduct(req, res) {
-    const product = req.body;
+    const product = new ProductDto(req.body);
 
-    const newProduct = fromPostToProductEntity(product);
+    const newProduct = fromDtoToProductEntity(product);
     await this.productService.addProduct(newProduct);
 
     res.sendStatus(200);
   }
 
   async updateProduct(req, res) {
-    const product = req.body;
-    const productEntity = fromPostToProductEntity(product);
+    const product = new ProductDto(req.body);
+    const productEntity = fromDtoToProductEntity(product);
     try {
       await this.productService.updateProduct(productEntity);
       res.sendStatus(200);
@@ -68,8 +69,8 @@ module.exports = class ProductController {
   }
 
   async updateProductPrice(req, res) {
-    const product = req.body;
-    const productEntity = fromPostToProductEntity(product);
+    const product = new ProductDto(req.body);
+    const productEntity = fromDtoToProductEntity(product);
     try {
       await this.productService.updateProductPrice(productEntity);
       res.sendStatus(200);
@@ -80,8 +81,8 @@ module.exports = class ProductController {
   }
 
   async updateProductPriceModifier(req, res) {
-    const product = req.body;
-    const productEntity = fromPostToProductEntity(product);
+    const product = new ProductDto(req.body);
+    const productEntity = fromDtoToProductEntity(product);
     console.log(productEntity);
     try {
       await this.productService.updateProductPriceModifier(productEntity);
@@ -93,7 +94,7 @@ module.exports = class ProductController {
   }
 
   async deleteProduct(req, res) {
-    const product = req.body;
+    const product = new ProductDto(req.body);
 
     await this.productService.deleteProduct(product);
 
@@ -101,8 +102,8 @@ module.exports = class ProductController {
   }
 
   async addStockProduct(req, res) {
-    const product = req.body;
-    const productEntity = fromPostToProductEntity(product);
+    const product = new ProductDto(req.body);
+    const productEntity = fromDtoToProductEntity(product);
     await this.productService.addStockProduct(productEntity);
 
     res.sendStatus(200);

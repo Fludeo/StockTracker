@@ -1,46 +1,25 @@
-import fetchData from "../../customhooks/fetchData"
-import { useEffect, useState } from "react"
+
+import { useState } from "react"
 import { LastSales } from "./last-sales"
 import { HoverList } from "./hover-list"
 import { StockAlert } from "./stock-alert"
 import { HeatMap } from "./graph-section"
+import useFetch from "../../customhooks/useFetch"
 
 
 
 export const DashBoardPage = (props) => {
-    const [saleData, setSaleData] = useState(null)
-    const [saleLoading, setSaleLoading] = useState(true)
-    const [saleError, setSaleError] = useState(false)
 
-    const [productData, setProductData] = useState(null)
-    const [productLoading, setProductLoading] = useState(true)
-    const [productError, setProductError] = useState(false)
-
+    const saleUrl = '/sale/get/all'
+    const sales = useFetch(saleUrl)
+  
+    const productUrl = '/product/get/all'
+    const products = useFetch(productUrl)
 
     const [hoverList,sethoverList] = useState(false)
     
 
 
-
-
-
-
-    
-    
-  
-  
-    
-
-    useEffect(() => {
-     
-    fetchData('/sale/get/all', setSaleData, setSaleLoading, setSaleError)
-
-    fetchData('/product/get/all',setProductData,setProductLoading,setProductError)
-    
-    
-    }, [])
-  
-  
   
   
   
@@ -50,14 +29,14 @@ export const DashBoardPage = (props) => {
   
       
   <section className=' md:w-full w-full md:h-full h-full flex flex-col gap-4 rounded-md '>
-       {saleLoading? 'Cargando': saleError ? 'Error':<LastSales className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  " setHoverList={sethoverList} data ={saleData} ></LastSales>}
-       {productLoading? 'Cargando': productError ? 'Error':<StockAlert className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  "  data ={productData} ></StockAlert>}
+       {sales.loading? 'Cargando': sales.error ? 'Error':<LastSales className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  " setHoverList={sethoverList} data ={sales.data} ></LastSales>}
+       {products.loading? 'Cargando': products.error ? 'Error':<StockAlert className="  md:w-full w-full md:h-1/2 h-1/2   rounded-md  border  overflow-auto bg-gray-100  "  data ={products.data} ></StockAlert>}
   </section>
   
 
    
        <section className='  md:w-full w-full md:h-full h-1/2 overflow-auto md:border border rounded-md bg-gray-100'>
-       {(hoverList!==false)?<HoverList  hoverList ={hoverList}></HoverList>:saleData!=null&&<HeatMap data={saleData}></HeatMap> }
+       {(hoverList!==false)?<HoverList  hoverList ={hoverList}></HoverList>:sales.data!=null&&<HeatMap data={sales.data}></HeatMap> }
       
        </section>
 

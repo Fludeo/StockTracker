@@ -28,15 +28,16 @@ module.exports = class SaleService {
   async addNewSale(sale) {
     const loop = await sale.listaProductos.map(async (item) => {
       if (item.product.stock < item.quantity) {
-        throw new NoStockError(`No hay suficiente stock de ${item.product.descipcion}`);
+        throw new NoStockError(`No hay suficiente stock de ${item.descipcion}`);
       }
 
-      const product = await this.productRepository.getById(item.itemId);
-      product.stock -= item.quantity;
+      const product = await this.productRepository.getById(item.product.id);
+
+      product.stock -= Number(item.quantity);
+
       await this.productRepository.updateProduct(product);
     });
     await Promise.all(loop);
-
     await this.saleRepository.addNewSale(sale);
   }
 };

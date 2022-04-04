@@ -1,4 +1,5 @@
 const Sale = require('../entity/saleEntity');
+const fromDtoToProductList = require('../../product_list/mapper/product-list-mapper');
 
 exports.fromSaleModelToEntity = ({
   id,
@@ -19,20 +20,20 @@ exports.fromSaleModelToEntity = ({
   deletedAt,
 );
 
-exports.fromPostToSaleEntity = ({
+exports.fromDtoToSaleEntity = ({
   id = null,
-  listaProductos,
-  totalVenta,
-  ganancia,
+  productList,
+  saleTotal,
+  totalEarn,
   createdAt = null,
   updatedAt = null,
   deletedAt = null,
 
 }) => new Sale(
   Number(id),
-  listaProductos,
-  parseFloat(totalVenta),
-  parseFloat(ganancia),
+  fromDtoToProductList(productList),
+  parseFloat(saleTotal),
+  parseFloat(totalEarn),
   createdAt,
   updatedAt,
   deletedAt,

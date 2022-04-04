@@ -1,20 +1,20 @@
 import { useEffect, useReducer, useState } from "react"
-import fetchData from "../../customhooks/fetchData"
 import { AddProductForm, SimpleForm } from "./forms"
 import { PopUp } from "../common/popup"
 import { Table } from "../common/table"
+import useFetch from "../../customhooks/useFetch"
 
 
 const initialState ={}
 
 const stockReducer =(state,action)=>{
 
-  
-
   let newState ={};
-  switch(action.type){
+
+  switch(action.type)
+  {
     case'UPDATE_VALUE':
-    newState ={...state}
+    newState = {...state}
     newState[action.payload.field] = action.payload.updatedValue
     return newState
 
@@ -25,13 +25,9 @@ const stockReducer =(state,action)=>{
     newState.productInfo = action.payload.productInfo
     return newState
 
-  
-    
     default:
       return null
-    
-    
-      }
+  }
 
     
 }
@@ -40,11 +36,10 @@ const stockReducer =(state,action)=>{
 export const StockPage = (props) => {
 
   
-
   const [state,dispatch] = useReducer(stockReducer,initialState)
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [tableData, setTableData] = useState([])
+  const url ='/product/get/all'
+  const{data,loading,error} = useFetch(url)
 
 
   async function handleStockSubmit(e) {
@@ -148,11 +143,11 @@ export const StockPage = (props) => {
 
   useEffect(() => {
 
-    fetchData('/product/get/all', setData, setLoading, setError)
+    if(data!=null){
+    setTableData(data)
+  }
 
-  }, [])
-
-
+  }, [data])
 
 
 
@@ -167,7 +162,7 @@ export const StockPage = (props) => {
         addStock={(content)=>dispatch({type:'POPUP', payload:{popup:'popupAddStock',trigger:true,productInfo:content}})} 
         editPrice={(content)=>dispatch({type:'POPUP', payload:{popup:'popupEditPrice',trigger:true,productInfo:content}})}
         editModifier={(content)=>dispatch({type:'POPUP', payload:{popup:'popupEditModifier',trigger:true,productInfo:content}})}
-        tableContent={data}>
+        tableContent={tableData}>
         </Table>
       </section>
 

@@ -1,7 +1,10 @@
 module.exports = class SaleDto {
-  constructor({ productList, saleTotal, totalEarn }) {
-    this.totalEarn = totalEarn;
+  constructor({
+    id = null, productList, saleTotal, totalEarn,
+  }) {
+    this.id = id;
     this.productList = productList;
+    this.totalEarn = totalEarn;
     this.saleTotal = saleTotal;
   }
 };

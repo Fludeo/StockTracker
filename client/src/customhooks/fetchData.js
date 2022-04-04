@@ -5,10 +5,11 @@ export default async function fetchData(url,setData,setLoading,setError){
         const data = await response.json()
         setData(data)
         setLoading(false)
-    }
+   }
     else{
-        setError(true)
+      setError(true)
         setLoading(false)
     }
 }
+
 

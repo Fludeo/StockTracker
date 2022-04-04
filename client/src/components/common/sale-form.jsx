@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useState } from "react";
-import fetchData from "../../customhooks/fetchData";
+import {  useEffect, useReducer, useState } from "react";
+
 import {ARSConverter} from "../../customhooks/helperFunctions"
+import useFetch from "../../customhooks/useFetch";
 
 import { Icon } from "./Icon";
 
@@ -11,7 +12,7 @@ import { Icon } from "./Icon";
 const initialState = {
                         itemList:[
                                 {
-                                product:{id:"",precioCosto:0,precioModificador:0},
+                                product:{id:"",descripcion:"",precioCosto:0,precioModificador:0},
                                 quantity:0, 
                                 subTotal:0,
                                 discount:0, 
@@ -128,15 +129,27 @@ export const SaleForm = (props) => {
 
 
     const [state,dispatch] = useReducer(saleFormReducer,initialState)
-    const [data, setData] = useState(null)
-    const [sortedData,setSortedData]= useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const [sortedData,setSortedData]= useState([])
+    const url = '/product/get/all'
+    const {data,loading,error} = useFetch(url)
+  
+
+
+    function setDataAux(data){
+        setSortedData(data.sort((a, b) => (a.descripcion > b.descripcion) ? 1 : (a.descripcion < b.descripcion) ? -1 : 0))  
+     }
+
+
+
+    
+   
+
+
    
 
    
     const newEntry =   {
-                        product:{id:"",precioCosto:0,precioModificador:0},
+                        product:{id:"",descripcion:"",precioCosto:0,precioModificador:0},
                         quantity:0, 
                         subTotal:0, 
                         discount:0 
@@ -155,6 +168,8 @@ export const SaleForm = (props) => {
         const finalList ={productList:state.itemList,
                           saleTotal: state.saleTotal,
                         totalEarn: state.saleTotal - state.costSaleTotal}
+
+        state.itemList.map(item => console.log(item.descripcion))
         try {
            const response =  await fetch('/sale/new', {
               method: 'POST',
@@ -174,21 +189,24 @@ export const SaleForm = (props) => {
     }
   
 
-   
+   useEffect (()=>{
 
-    function setDataAux(data){
-       setData(data)
-       setSortedData(data.sort((a, b) => (a.descripcion > b.descripcion) ? 1 : (a.descripcion < b.descripcion) ? -1 : 0))
+    if(data!=null){
+        setDataAux(data)
     }
-    useEffect(() => {
 
-        fetchData('/product/get/all', setDataAux, setLoading, setError)
+   },[data])
 
-    }, [])
+    
+    
+  
+   
+  
 
+     
 
     return (loading ? 'Cargando' : error ? 'Error' :
-        <form  className='relative overflow-auto max-h-screen self-center md:w-1/2 w-full text-left   flex flex-col  gap-1 bg-gray-700 rounded-md  md:m-16  md:px-8 md:p-12  p-4'>
+        <form  className='relative overflow-auto max-h-screen self-center md:w-1/2 w-full text-left  flex flex-col  gap-1 bg-gray-700 rounded-md  md:m-16  md:px-8 md:p-12  p-4'>
             <table className="divide-y divide-gray-500 ">
                 <thead>
                     <tr className="text-yellow-500 ">
@@ -202,16 +220,20 @@ export const SaleForm = (props) => {
                         {state.itemList.map(item => <tr key={state.itemList.indexOf(item)}>
                             <td className=" md:text-base text-sm  p-4 pl-0">
                                 <select  value={String(item.product.id)} className=" overflow-ellipsis w-40  md:w-96 rounded-md md:p-1  focus:outline-none border-2  focus:border-blue-500"  
-                                onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'product',value:data.find(product => String(product.id) === e.currentTarget.value)}})}>
+                                onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'product',value:sortedData.find(product => String(product.id) === String(e.currentTarget.value))}})}>
                                     <option value=""  disabled hidden>Elegir producto</option>
                                     {sortedData.map((product) => (<option key={product.id} value={String(product.id)}>{`${product.descripcion}    (${product.stock})`}</option>))}
                                 </select>
                             </td>
                             <td className=" md:text-base text-sm">
-                                <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'discount',value:e.currentTarget.value}})} className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' type="number" value={item.discount} min="0" />
+                                <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'discount',value:Number(e.currentTarget.value)}})} 
+                                className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' 
+                                type="number" value={item.discount} min="0" />
                             </td>
                             <td className=" md:text-base text-sm">
-                                <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'quantity',value:e.currentTarget.value}})} className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' type="number" value={item.quantity} min="1" />
+                                <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'quantity',value: Number(e.currentTarget.value)}})} 
+                                className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' 
+                                type="number" value={item.quantity} min="1" />
                             </td>
                             <td className="text-gray-200">
                                 {ARSConverter(item.subTotal)}
@@ -233,8 +255,14 @@ export const SaleForm = (props) => {
             </table>
          
             <div className='justify-around flex  flex-row'>
-                    <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' type='button' onClick={(e)=>SalePost(e)}>Aceptar</button>
-                    <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' onClick={() => props.setSalePopup(false)}>Cancelar</button>
+                    <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
+                            type='button' onClick={(e)=>SalePost(e)}>
+                            Aceptar
+                    </button>
+                    <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
+                            onClick={() => props.setSalePopup(false)}>
+                            Cancelar
+                    </button>
                 </div>
         </form >
     );

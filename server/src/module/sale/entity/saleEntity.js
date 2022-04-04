@@ -14,9 +14,9 @@ module.exports = class Sale {
     id, listaProductos, totalVenta, ganancia, createdAt, updatedAt, deletedAt,
   ) {
     this.id = id;
+    this.listaProductos = listaProductos;
     this.totalVenta = totalVenta;
     this.ganancia = ganancia;
-    this.listaProductos = listaProductos;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
