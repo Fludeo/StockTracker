@@ -40,7 +40,7 @@ export const DashBoardPage = (props) => {
       
        </section>
 
-       <section className=' md:col-span-2  md:w-full w-full md:h-full h-1/2 gap-4 flex flex-col   rounded-md '>
+       <section className=' md:col-span-2  md:w-full w-full md:h-full h-1/2 gap-4 flex flex-col  rounded-md '>
        <div className='  md:w-full w-full md:h-3/4 h-1/2  md:border border rounded-md bg-gray-100'>
       
       

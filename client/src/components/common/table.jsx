@@ -46,43 +46,51 @@ export const Table = (props) => {
 
 
   return (
-    <div className=' w-full flex flex-col'>
+    <div className=' w-full flex flex-col gap-2 '>
 
-      <div className=" bg-gray-50 justify-around flex flex-row sticky top-0">
-        <div className='flex flex-row' >
-          <input className=' md:w-52 w-32 rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' onChange={(e) => filterContent(e.currentTarget.value)} type="text" placeholder='Buscar...' />
-          <Icon type={searchIcon.type} color={searchIcon.color} className="h-6 w-6 relative mt-2 top-1 "></Icon>
+      <div className="  md:mr-12 justify-between flex flex-row sticky top-0">
+        <div className='flex flex-row ' >
+          <input className='  md:w-72 w-32  rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' 
+          onChange={(e) => filterContent(e.currentTarget.value)} 
+          type="text" placeholder='Buscar...' />
+          <Icon type={searchIcon.type} color={searchIcon.color} 
+                className="h-5 w-5 relative mt-2 top-1 "></Icon>
         </div>
         <div className='flex flex-row gap-2' >
-          <button className=" md:text-base text-xs px-2 font-semibold text-green-100 rounded-md bg-green-500  hover:bg-blue-500" onClick={props.addProduct}>Nuevo producto</button>
-          <button className="md:text-base text-xs px-2 font-semibold text-red-100 rounded-md bg-red-500  hover:bg-blue-500" onClick={props.deleteProduct}>Quitar producto</button>
+          <button className=" md:text-base text-xs px-2 mt-1 font-bold text-green-100 rounded-md bg-green-500  hover:bg-blue-500"
+           onClick={props.addProduct}>Nuevo producto</button>
+          <button className="md:text-base text-xs px-2 mt-1 font-bold text-red-100 rounded-md bg-red-500  hover:bg-blue-500" 
+          onClick={props.deleteProduct}>Quitar producto</button>
         </div>
       </div>
-      <table className=" overflow-auto divide-y divide-gray-200  table-auto">
-        <thead className="bg-gray-50 sticky top-9">
+      <div className="rounded-md  overflow-auto ">
+      <table className="  w-full h-full divide-y divide-gray-200  table-auto">
+
+        <thead className="bg-gray-700 sticky  text-left font-bold text-base text-yellow-500">
           <tr >
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>Id</th>
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>descripción</th>
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>stock</th>
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>Precio final </th>
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>Precio de costo</th>
-            <th className=' px-6 py-3 text-left  text-xs font-medium text-gray-500 uppercase'>Modificador en % </th>
+            <th className=' px-6 py-3 '>Id</th>
+            <th className=' px-6 py-3 '>Descripción</th>
+            <th className=' px-6 py-3 '>Stock</th>
+            <th className=' px-6 py-3 '>Precio final </th>
+            <th className=' px-6 py-3 '>Precio de costo</th>
+            <th className=' px-6 py-3 '>Modificador en % </th>
           </tr>
-
-
         </thead>
-        <tbody className='divide-y divide-gray-200'>
+
+        <tbody className='divide-y divide-gray-200 font-bold text-xs md:text-sm text-gray-500 '>
           {tableContent.map(content =>
-            <tr className='md:text-sm' key={content.id}>
-              <td className=' px-6 py-2 text-xs ' >{content.id}</td>
-              <td className=' px-6 py-2 text-xs md:text-sm' >{content.descripcion}</td>
-              <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2 '><p>{content.stock}</p><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon></div></td>
-              <td className='  px-6 py-2 text-xs ' >{ARSConverter(content.precioCosto * (1.0 + (content.precioModificador / 100)))}</td>
-              <td className='  px-6 py-2 text-xs ' ><div className='flex flex-row gap-2'><p>{ARSConverter(content.precioCosto)}</p><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
-              <td className='  px-6 py-2 text-xs '><div className='flex flex-row gap-2'><p>{content.precioModificador}</p><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
+            <tr className={tableContent.indexOf(content)%2===0?' bg-gray-100':'bg-gray-50'} key={content.id}>
+              <td className=' px-6 py-2 ' >{content.id}</td>
+              <td className=' px-6 py-2 ' >{content.descripcion}</td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2 '><p>{content.stock}</p><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon></div></td>
+              <td className=' px-6 py-2 ' >{ARSConverter(content.precioCosto * (1.0 + (content.precioModificador / 100)))}</td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2'><p>{ARSConverter(content.precioCosto)}</p><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
+              <td className=' px-6 py-2 '><div className='flex flex-row gap-2'><p>{content.precioModificador}</p><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
             </tr>)}
         </tbody>
+
       </table>
+      </div>
     </div >)
 
 }

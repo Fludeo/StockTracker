@@ -9,13 +9,22 @@ export const useFetch = (url) => {
 
 
     useEffect( () => {
+        const fetchData = async(url)=>{
 
-        setLoading(true);
-        fetch(url)
-            .then(response => response.json())
-            .then(res=>setData(res))
-            .catch(err =>setError(err))
-            .finally(() => setLoading(false));
+            try {
+              setLoading(true)
+              const response = await fetch(url)
+              const jsonData = await response.json()
+              setData(jsonData)
+            } catch (err) {
+              setError(err)
+            }
+            finally{
+              setLoading(false)
+            }
+          }
+      
+          fetchData(url)
             
     },[url])
 

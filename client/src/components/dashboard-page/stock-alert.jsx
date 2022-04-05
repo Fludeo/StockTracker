@@ -1,9 +1,4 @@
 import { useEffect, useState } from "react";
-import fetchData from "../../customhooks/fetchData";
-
-import ARSConverter from "../../customhooks/helperFunctions";
-import { Icon } from "../common/Icon";
-
 
 
  export  const StockAlert = (props)=>{
@@ -22,19 +17,19 @@ import { Icon } from "../common/Icon";
         <div className={props.className} >
         
         <table className=" w-full divide-y divide-gray-200   table-auto ">
-            <thead className="bg-gray-100">
+            <thead className="bg-gray-700 font-bold text-xs text-left text-yellow-500">
             <tr>
-                <th className="px-6 py-1 text-left  text-xs font-medium text-gray-500 uppercase">ID</th>
-                <th className="px-6 py-1 text-left  text-xs font-medium text-gray-500 uppercase">Producto</th>
-                <th className="px-6 py-1 text-left  text-xs font-medium text-gray-500 uppercase">Alerta Stock</th>
+                <th className="px-6 py-1 ">Id</th>
+                <th className="px-6 py-1 ">Producto</th>
+                <th className="px-6 py-1 ">Alerta Stock</th>
             </tr>
             </thead>
-            <tbody className='divide-y divide-gray-200 text-gray-600  font-medium'>
+            <tbody className='divide-y divide-gray-200 text-gray-500 text-xs  font-bold'>
             {stockAlertItems.map(item=> 
-            <tr key={item.id}>
-                <td className="px-6 py-2 text-xs" >{item.id }</td>
-                <td className="px-6 py-2 text-xs">{item.descripcion}</td>
-                <td className={item.stock <5 ? "px-6 py-2 text-xs font-semibold text-red-500" :item.stock<10? textColorClass+" text-orange-500":item.stock<15?textColorClass+" text-yellow-500":item.stock<20? textColorClass+" text-gray-500":textColorClass+"text-green-500"}>{item.stock}</td>
+            <tr className={stockAlertItems.indexOf(item)%2===0?' bg-gray-100':'bg-gray-50'} key={item.id}>
+                <td className="px-6 py-2  " >{item.id }</td>
+                <td className="px-6 py-2  ">{item.descripcion}</td>
+                <td className={item.stock <5 ? "px-6 py-2   text-red-500" :item.stock<10? textColorClass+" text-orange-500":item.stock<15?textColorClass+" text-yellow-500":item.stock<20? textColorClass+" text-gray-500":textColorClass+"text-green-500"}>{item.stock}</td>
           
               
             </tr>)}

@@ -235,7 +235,7 @@ export const SaleForm = (props) => {
                                 className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' 
                                 type="number" value={item.quantity} min="1" />
                             </td>
-                            <td className="text-gray-200">
+                            <td className="text-gray-200 font-bold">
                                 {ARSConverter(item.subTotal)}
                             </td>
                             <td>

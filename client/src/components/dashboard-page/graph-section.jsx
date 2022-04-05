@@ -27,9 +27,7 @@ export const HeatMap =(props) =>{
   
  
   colors: ["#6d28d9"],
-  title: {
-    text: 'Ventas en la Semana'
-  },
+ 
 },)
 
 

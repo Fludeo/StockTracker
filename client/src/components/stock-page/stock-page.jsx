@@ -155,7 +155,7 @@ export const StockPage = (props) => {
     <main className='md:w-5/6 w-full h-screen flex md:flex-col flex-row '>
 
 
-      <section className=' m-0 w-full flex flex-col overflow-auto'>
+      <section className=' m-0 w-full pl-4 pr-4 flex flex-col overflow-auto'>
         <Table
         deleteProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupDeleteProduct',trigger:true ,productInfo:{}}})} 
         addProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupAddProduct',trigger:true ,productInfo:{}}})}  

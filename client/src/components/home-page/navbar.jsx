@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+
 import { LinkWithIcon } from '../common/linkicon';
 
 
@@ -32,9 +32,9 @@ export const Navbar = (props) => {
 
       </div>
       <div className='w-full '>
-        <ul className=' justify-around text-yellow-400 flex flex-row md:flex-col   gap-4 '>
+        <ul className=' justify-around text-yellow-500  font-bold  flex flex-row md:flex-col   gap-4 '>
 
-          {links.map((link) => (<li key={link.text}><LinkWithIcon url={link.url} text={link.text} icon={link.icon}></LinkWithIcon> </li>))}
+          {links.map((link) => (<li className='hover:text-blue-500' key={link.text}><LinkWithIcon url={link.url} text={link.text} icon={link.icon}></LinkWithIcon> </li>))}
 
         </ul>
       </div>
