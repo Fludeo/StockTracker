@@ -12,7 +12,7 @@ export const HeatMap =(props) =>{
  
   const [series,setSeries] = useState()
   const [numMultiplier,setNumMultiplier] = useState(0)
-  const [graphRange, setGraphRange] = useState('WEEK')
+  const [graphRange, setGraphRange] = useState({week:true,month:false,year:false})
 
  const [options,setOptions] = useState({
   chart: {
@@ -34,10 +34,9 @@ export const HeatMap =(props) =>{
 
 
 
-  
-  
+const buttonSelected ="w-20 py-1 font-bold rounded-md m-1 hover:bg-blue-400 bg-blue-400"
+const buttonUnSelected ="w-20 py-1 font-bold rounded-md m-1 hover:bg-blue-400 bg-gray-300"
  
-
 useEffect(()=>{
 
 
@@ -55,6 +54,7 @@ useEffect(()=>{
 
  setSeries(graphData)
 
+
 },[numMultiplier,props.data])
 
  
@@ -64,17 +64,19 @@ useEffect(()=>{
 <div className={props.className} id="chart">
  
 {series!=null&&<ReactApexChart options={options} series={series} type="heatmap" height={350} />}
-<div className="flex flex-row">
+<div className="flex flex-row justify-around ">
+  <div className="flex flex-row ">
   <button onClick={()=>setNumMultiplier(numMultiplier+1)} className="bg-gray-300 hover:bg-blue-400 text-gray-800 font-bold  py-1 px-4 rounded-l">
     Ant
   </button>
-  {numMultiplier!==0&&<button onClick={()=>setNumMultiplier(numMultiplier-1)} className="bg-gray-300 hover:bg-blue-400 text-gray-800 font-bold py-1 px-4 rounded-r">
+  {<button onClick={()=>numMultiplier!==0&&setNumMultiplier(numMultiplier-1)} className="bg-gray-300 hover:bg-blue-400 text-gray-800 font-bold py-1 px-4 rounded-r">
     Sig
   </button>}
-  <div className="flex flex-row justify-around text-gray-800">
-      <button className="w-20 py-1  font-bold rounded-md bg-gray-300 hover:bg-blue-400">Semana</button>
-      <button className="w-20 py-1  font-bold rounded-md bg-gray-300 hover:bg-blue-400">Mes</button>
-      <button className="w-20 py-1  font-bold rounded-md bg-gray-300 hover:bg-blue-400">Año</button>
+  </div>
+  <div className="flex flex-row  justify-around text-gray-800">
+      <button onClick={()=>setGraphRange({week:true,month:false,year:false})} className={graphRange.week?buttonSelected:buttonUnSelected}>Semana</button>
+      <button onClick={()=>setGraphRange({week:false,month:true,year:false})} className={graphRange.month?buttonSelected:buttonUnSelected}>Mes</button>
+      <button onClick={()=>setGraphRange({week:false,month:false,year:true})} className={graphRange.year?buttonSelected:buttonUnSelected}>Año</button>
     </div>
 </div>
      

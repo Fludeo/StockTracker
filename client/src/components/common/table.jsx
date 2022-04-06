@@ -48,7 +48,7 @@ export const Table = (props) => {
   return (
     <div className=' w-full flex flex-col gap-2 '>
 
-      <div className="  md:mr-12 justify-between flex flex-row sticky top-0">
+      <div className="   justify-between flex flex-row sticky top-0">
         <div className='flex flex-row ' >
           <input className='  md:w-72 w-32  rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' 
           onChange={(e) => filterContent(e.currentTarget.value)} 
@@ -82,10 +82,10 @@ export const Table = (props) => {
             <tr className={tableContent.indexOf(content)%2===0?' bg-gray-100':'bg-gray-50 uppercase'} key={content.id}>
               <td className=' px-6 py-2 ' >{content.id}</td>
               <td className=' px-6 py-2 uppercase' >{content.descripcion}</td>
-              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2 '><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon><p>{content.stock}</p></div></td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2 '><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200 cursor-pointer'></Icon><p>{content.stock}</p></div></td>
               <td className=' px-6 py-2 ' >{ARSConverter(content.precioCosto * (1.0 + (content.precioModificador / 100)))}</td>
-              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2'><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon><p>{ARSConverter(content.precioCosto)}</p></div></td>
-              <td className=' px-6 py-2 '><div className='flex flex-row gap-2'><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon><p>{content.precioModificador+' %'}</p></div></td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2'><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200 cursor-pointer'></Icon><p>{ARSConverter(content.precioCosto)}</p></div></td>
+              <td className=' px-6 py-2 '><div className='flex flex-row gap-2'><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200 cursor-pointer'></Icon><p>{content.precioModificador+' %'}</p></div></td>
             </tr>)}
         </tbody>
 
