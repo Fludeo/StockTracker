@@ -21,6 +21,7 @@ export const HomePage = (props) => {
     }
 
     const [salePopupTrigger, setSalePopupTrigger] = useState(false)
+ 
 
     const history = useHistory()
 
@@ -46,6 +47,7 @@ export const HomePage = (props) => {
             <PopUp trigger={salePopupTrigger}>
                 <SaleForm history={history} setSalePopup ={setSalePopupTrigger}></SaleForm>
             </PopUp>
+     
             <Icon onclick={() => setSalePopupTrigger(true)} type={saleIcon.type} color={saleIcon.color} 
             className=' shadow-2xl  cursor-pointer absolute md:bottom-15  md:right-20 md:h-20 md:w-20 bottom-7 right-5 h-16 w-16  rounded-full hover:bg-blue-600 ' ></Icon>
         </div>

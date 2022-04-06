@@ -16,13 +16,13 @@ export function sortByDate (arr){
 }
 
 
-export const prepareWeekData = (from,to,data)=>{
+export const prepareGraphData = (data)=>{
    
   const seriesData = []
   const date = new Date()
   const today = date.getDay()
   
-  for(let i =9;i<23;i++){
+  for(let i = 9;i<23;i++){
     let entry ={
       name:i,
       data:[]

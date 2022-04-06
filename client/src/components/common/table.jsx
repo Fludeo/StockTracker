@@ -23,10 +23,10 @@ export const Table = (props) => {
 
   function filterContent(value) {
 
-
+     const lowerCaseValue = value.toLowerCase()
     setTableContent(props.tableContent.filter((content) => {
 
-      if (content.descripcion.toLocaleLowerCase().includes(value)) {
+      if (content.descripcion.toLowerCase().includes(lowerCaseValue)) {
 
         return content;
 
@@ -73,19 +73,19 @@ export const Table = (props) => {
             <th className=' px-6 py-3 '>Stock</th>
             <th className=' px-6 py-3 '>Precio final </th>
             <th className=' px-6 py-3 '>Precio de costo</th>
-            <th className=' px-6 py-3 '>Modificador en % </th>
+            <th className=' px-6 py-3 '>Ganancia</th>
           </tr>
         </thead>
 
         <tbody className='divide-y divide-gray-200 font-bold text-xs md:text-sm text-gray-500 '>
           {tableContent.map(content =>
-            <tr className={tableContent.indexOf(content)%2===0?' bg-gray-100':'bg-gray-50'} key={content.id}>
+            <tr className={tableContent.indexOf(content)%2===0?' bg-gray-100':'bg-gray-50 uppercase'} key={content.id}>
               <td className=' px-6 py-2 ' >{content.id}</td>
-              <td className=' px-6 py-2 ' >{content.descripcion}</td>
-              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2 '><p>{content.stock}</p><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon></div></td>
+              <td className=' px-6 py-2 uppercase' >{content.descripcion}</td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2 '><Icon onclick={() => props.addStock(content)} type={plusIcon.type} color={plusIcon.color} className='h-5 w-5 hover:bg-blue-200'></Icon><p>{content.stock}</p></div></td>
               <td className=' px-6 py-2 ' >{ARSConverter(content.precioCosto * (1.0 + (content.precioModificador / 100)))}</td>
-              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2'><p>{ARSConverter(content.precioCosto)}</p><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
-              <td className=' px-6 py-2 '><div className='flex flex-row gap-2'><p>{content.precioModificador}</p><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon></div></td>
+              <td className=' px-6 py-2 ' ><div className='flex flex-row gap-2'><Icon onclick={() => props.editPrice(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon><p>{ARSConverter(content.precioCosto)}</p></div></td>
+              <td className=' px-6 py-2 '><div className='flex flex-row gap-2'><Icon onclick={() => props.editModifier(content)} type={adjustIcon.type} color={adjustIcon.color} className='h-4 w-4 hover:bg-blue-200'></Icon><p>{content.precioModificador+' %'}</p></div></td>
             </tr>)}
         </tbody>
 

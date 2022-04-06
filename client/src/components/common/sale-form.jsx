@@ -4,6 +4,7 @@ import {ARSConverter} from "../../customhooks/helperFunctions"
 import useFetch from "../../customhooks/useFetch";
 
 import { Icon } from "./Icon";
+import { PopUp } from "./popup";
 
 
 
@@ -20,7 +21,8 @@ const initialState = {
                                 }
                                  ],
                         saleTotal:0,
-                        costSaleTotal:0
+                        costSaleTotal:0,
+                        confirmPopupTrigger:false
                         }
 
 function subTotal(quantity,discount,price,priceMod){
@@ -72,7 +74,9 @@ const saleFormReducer =(state,action)=>{
     let newState;
 
     switch(action.type){
-
+        case 'CONFIRM_POPUP':
+            newState = {...state, confirmPopupTrigger: action.payload.trigger}
+            return newState
         case 'UPDATE_LIST':
         newState ={...state}
         newState.itemList[newState.itemList.indexOf(action.payload.item)][action.payload.field]=action.payload.value;
@@ -88,8 +92,7 @@ const saleFormReducer =(state,action)=>{
                             newState.itemList[newState.itemList.indexOf(action.payload.item)]['product'].precioCosto)
                     newState.saleTotal = calcTotal(newState.itemList)
                     newState.costSaleTotal = calcCostTotal(newState.itemList)
-        
-        console.log(newState.itemList)
+    
         return newState
 
         case'ADD_ITEM':
@@ -105,7 +108,10 @@ const saleFormReducer =(state,action)=>{
         newState.saleTotal = calcTotal(newState.itemList)
         newState.costSaleTotal = calcCostTotal(newState.itemList)
         return newState;
-
+        
+        case 'CLEAR_LIST':
+            newState ={...state,itemList:action.payload}
+            return newState
         default:
             return null
     }
@@ -132,7 +138,13 @@ export const SaleForm = (props) => {
     const [sortedData,setSortedData]= useState([])
     const url = '/product/get/all'
     const {data,loading,error} = useFetch(url)
-  
+    
+    const newEntry =   {
+        product:{id:"",descripcion:"",precioCosto:0,precioModificador:0},
+        quantity:0, 
+        subTotal:0, 
+        discount:0 
+        }
 
 
     function setDataAux(data){
@@ -140,20 +152,8 @@ export const SaleForm = (props) => {
      }
 
 
-
+   
     
-   
-
-
-   
-
-   
-    const newEntry =   {
-                        product:{id:"",descripcion:"",precioCosto:0,precioModificador:0},
-                        quantity:0, 
-                        subTotal:0, 
-                        discount:0 
-                        }
     
     function DeleteItem(item){
         const result = [...state.itemList]
@@ -192,45 +192,51 @@ export const SaleForm = (props) => {
    useEffect (()=>{
 
     if(data!=null){
+        const entry =   {
+            product:{id:"",descripcion:"",precioCosto:0,precioModificador:0},
+            quantity:0, 
+            subTotal:0,
+            discount:0, 
+            costSubTotal:0 
+            }
+        dispatch({type:'CLEAR_LIST',payload:[entry]})
         setDataAux(data)
+       
     }
+
 
    },[data])
 
-    
-    
-  
-   
-  
 
      
 
-    return (loading ? 'Cargando' : error ? 'Error' :
+    return (loading ? 'Cargando' : error ? 'Error' : 
+    <>
         <form  className='relative overflow-auto max-h-screen self-center md:w-1/2 w-full text-left  flex flex-col  gap-1 bg-gray-700 rounded-md  md:m-16  md:px-8 md:p-12  p-4'>
             <table className="divide-y divide-gray-500 ">
                 <thead>
-                    <tr className="text-yellow-500 ">
-                        <th className="text-left md:text-base text-sm">Producto</th>
-                        <th className="text-left md:text-base text-sm">Descuento %</th>
-                        <th className="text-left md:text-base text-sm">Cantidad</th>
-                        <th className="text-left md:text-base text-sm">Subtotal</th>
+                    <tr className="text-yellow-500 text-left md:text-base text-sm ">
+                        <th>Producto</th>
+                        <th>Descuento %</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                     <tbody className="divide-y divide-gray-500">
-                        {state.itemList.map(item => <tr key={state.itemList.indexOf(item)}>
-                            <td className=" md:text-base text-sm  p-4 pl-0">
+                        {state.itemList.map(item => <tr className="md:text-base text-sm " key={state.itemList.indexOf(item)}>
+                            <td className="  p-4 pl-0">
                                 <select  value={String(item.product.id)} className=" overflow-ellipsis w-40  md:w-96 rounded-md md:p-1  focus:outline-none border-2  focus:border-blue-500"  
                                 onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'product',value:sortedData.find(product => String(product.id) === String(e.currentTarget.value))}})}>
                                     <option value=""  disabled hidden>Elegir producto</option>
                                     {sortedData.map((product) => (<option key={product.id} value={String(product.id)}>{`${product.descripcion}    (${product.stock})`}</option>))}
                                 </select>
                             </td>
-                            <td className=" md:text-base text-sm">
+                            <td >
                                 <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'discount',value:Number(e.currentTarget.value)}})} 
                                 className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' 
                                 type="number" value={item.discount} min="0" />
                             </td>
-                            <td className=" md:text-base text-sm">
+                            <td >
                                 <input onChange={(e)=>dispatch({type:'UPDATE_LIST', payload:{item:item,field:'quantity',value: Number(e.currentTarget.value)}})} 
                                 className=' md:w-16 w-10 rounded-md md:p-1 focus:outline-none border-2  focus:border-blue-500' 
                                 type="number" value={item.quantity} min="1" />
@@ -256,7 +262,7 @@ export const SaleForm = (props) => {
          
             <div className='justify-around flex  flex-row'>
                     <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
-                            type='button' onClick={(e)=>SalePost(e)}>
+                            type='button' onClick={()=>dispatch({type:'CONFIRM_POPUP',payload:{trigger: true}})}>
                             Aceptar
                     </button>
                     <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
@@ -264,7 +270,53 @@ export const SaleForm = (props) => {
                             Cancelar
                     </button>
                 </div>
+               
+
         </form >
+         <PopUp trigger={state.confirmPopupTrigger}>
+         <div className='relative overflow-auto max-h-screen self-center md:w-1/2 w-full text-left  flex flex-col  gap-1 bg-gray-700 rounded-md  md:m-16  md:px-8 md:p-12  p-4'>
+             <h1 className="text-yellow-500 m-5 ml-0 text-2xl self-center font-bold ">Confirmar venta</h1>
+             <table className="divide-y divide-gray-500 " >
+                 <thead>
+                 <tr className="text-yellow-500 text-left md:text-base text-sm p-4 pl-0 ">
+                      <th>Producto</th>
+                      <th>Descuento %</th>
+                      <th>Cantidad</th>
+                      <th>Subtotal</th>
+                     
+                 </tr>
+                 </thead>
+                 <tbody className="divide-y divide-gray-500 ">
+                 {state.itemList.map(item => <tr className="md:text-base text-sm text-gray-200 font-bold" key={state.itemList.indexOf(item)}>
+                  <td className="p-4 pl-0 ">{item.product.descripcion}</td>
+                  <td>{item.discount}</td>
+                  <td>{item.quantity}</td>
+                  <td> {ARSConverter(item.subTotal)}</td>
+             </tr>)}
+             </tbody>
+                 <tfoot>
+             <tr>
+                 <td></td>   
+                 <td></td>
+                 <td className=" p-4 pl-0 text-yellow-500 text-base font-bold"><p>Total:</p></td>
+                 <td className=" text-green-500 text-base font-bold"><p>{ARSConverter(state.saleTotal)}</p></td>
+             </tr>
+                 </tfoot>
+             </table>
+             <div className='justify-around flex  flex-row'>
+                  <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
+                 type='button' onClick={(e) => SalePost(e)}>
+                 Aceptar
+                  </button>
+                  <button className='h-9 my-4 px-2 font-bold text-xs text-gray-700 rounded-md bg-yellow-500  hover:bg-blue-500' 
+                 onClick={()=>dispatch({type:'CONFIRM_POPUP',payload:{trigger: false}})}>
+                 Cancelar
+             </button>
+             </div>
+             </div>
+             
+     </PopUp>
+        </>
     );
 }
 

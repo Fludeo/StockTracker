@@ -35,7 +35,7 @@ export const DashBoardPage = (props) => {
   
 
    
-       <section className='  md:w-full w-full md:h-full h-1/2 overflow-auto md:border border rounded-md bg-gray-100'>
+       <section className='  w-full h-full overflow-auto md:border border rounded-md bg-gray-100 p-2'>
        {(hoverList!==false)?<HoverList  hoverList ={hoverList}></HoverList>:sales.data!=null&&<HeatMap data={sales.data}></HeatMap> }
       
        </section>
