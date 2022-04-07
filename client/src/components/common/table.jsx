@@ -46,9 +46,9 @@ export const Table = (props) => {
 
 
   return (
-    <div className=' w-full flex flex-col gap-2 '>
+    <div className=' w-full flex flex-col gap-2  '>
 
-      <div className="   justify-between flex flex-row sticky top-0">
+      <div className=" justify-between flex flex-row sticky top-0">
         <div className='flex flex-row ' >
           <input className='  md:w-72 w-32  rounded-md px-2 focus:outline-none border-2 mt-2  focus:border-blue-500' 
           onChange={(e) => filterContent(e.currentTarget.value)} 
@@ -63,7 +63,7 @@ export const Table = (props) => {
           onClick={props.deleteProduct}>Quitar producto</button>
         </div>
       </div>
-      <div className="rounded-md  overflow-auto ">
+      <div className="rounded-md  overflow-auto  ">
       <table className="  w-full h-full divide-y divide-gray-200  table-auto">
 
         <thead className="bg-gray-700 sticky  text-left font-bold text-base text-yellow-500">

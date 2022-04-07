@@ -152,10 +152,10 @@ export const StockPage = (props) => {
 
 
   return (loading ? 'Cargando' : error ? 'Error' :
-    <main className='md:w-5/6 w-full h-screen flex md:flex-col flex-row '>
+    <main className='md:w-5/6 w-full h-screen bg-gray-50 flex md:flex-col flex-row '>
 
 
-      <section className=' m-0 w-full pl-4 pr-4 flex flex-col overflow-auto'>
+      <section className=' m-0 w-full pl-4 pr-4 flex flex-col overflow-auto shadow-lg'>
         <Table
         deleteProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupDeleteProduct',trigger:true ,productInfo:{}}})} 
         addProduct={()=>dispatch({type:'POPUP', payload:{popup:'popupAddProduct',trigger:true ,productInfo:{}}})}  

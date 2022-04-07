@@ -15,8 +15,27 @@ import { useEffect, useState } from "react";
     },[props.data])
     return(
         <div className={props.className} >
+        <div className="flex flex-row gap-4 w-full h-full ">
+            <div className="rounded-md shadow-lg bg-gray-50 w-1/3 h-full">
+
+            </div>
+            <div className="rounded-md shadow-lg bg-gray-50 w-1/3 h-full">
+
+            </div>
+            <div className="rounded-md shadow-lg bg-gray-50 w-1/3 h-full">
+
+            </div>
+       
+        </div>
+        </div>
+      
         
-        <table className=" w-full divide-y divide-gray-200   table-auto ">
+    
+    );
+
+}
+
+/* <table className=" w-full divide-y divide-gray-200   table-auto ">
             <thead className="bg-gray-700 font-bold text-xs text-left text-yellow-500">
             <tr>
                 <th className="px-6 py-1 ">Id</th>
@@ -34,12 +53,4 @@ import { useEffect, useState } from "react";
               
             </tr>)}
             </tbody>
-        </table>
-  
-        </div>
-      
-        
-    
-    );
-
-}
+        </table>*/
