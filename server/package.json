@@ -10,7 +10,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "jsdoc": "^3.6.10",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.20",
     "rsdi": "^1.0.12",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
